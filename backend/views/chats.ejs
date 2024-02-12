@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simply Chat</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+      }
+
+      .chat-container {
+        display: flex;
+        height: 100%;
+        max-width: 100%;
+        margin: 20px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+      .chat-header {
+        overflow: hidden;
+      }
+      .header-left {
+        overflow: hidden;
+      }
+
+      .user-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        border-right: 1px solid #ccc;
+      }
+
+      .chat-area {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: auto;
+      }
+
+      .chat-header {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .header-left {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo {
+        margin-right: 10px; /* Adjust margin as needed */
+      }
+
+      .add-img {
+        width: 24px; /* Adjust width as needed */
+        height: 24px; /* Adjust height as needed */
+        margin-right: 5px; /* Adjust margin as needed */
+      }
+
+      .user-list-item {
+        list-style: none;
+        margin: 0;
+        padding: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
+
+      .user-list-item img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .user-list-item:hover {
+        background-color: #f5f5f5;
+      }
+
+      .selected-user {
+        background-color: #f5f5f5;
+      }
+
+      .messages {
+        margin-top: 20px;
+        flex: 1;
+      }
+
+      .message {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+      }
+
+      .message .sender {
+        font-size: 12px;
+        color: #888;
+      }
+
+      .message .content {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 10px;
+        max-width: 70%;
+        word-wrap: break-word;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .input-container {
+        display: flex;
+        background-color: #fff;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+      }
+
+      input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+      }
+
+      button {
+        background-color: #128c7e;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      button:hover {
+        background-color: #075e54;
+      }
+      .logo {
+        margin-right: 10px;
+      }
+      .add-img {
+        margin-left: 15px;
+      }
+
+      /* Model CSS*/
+
+      .modal {
+        display: none; /* Hide the modal by default */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+        z-index: 1000; /* Ensure the modal is above other content */
+        overflow: auto; /* Enable scrolling if needed */
+      }
+
+      .modal-content {
+        background-color: #fefefe; /* Modal background color */
+        margin: 20% auto; /* Center the modal vertically and horizontally */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Box shadow for a raised effect */
+        max-width: 400px; /* Adjust the maximum width as needed */
+      }
+
+      .close {
+        color: #aaa; /* Close button color */
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black; /* Close button color on hover */
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      #userSearchModal {
+        margin-right: 20px;
+        border: 1px solid #ccc; /* Add a border */
+        border-radius: 5px; /* Add some border radius for better appearance */
+        padding: 5px; /* Add padding for better spacing */
+        width: 100%; /* Make the input fill the entire width of the modal */
+        box-sizing: border-box; /* Include padding and border in the element's total width and height */
+      }
+
+      .user-list-item-modal {
+        list-style: none;
+        margin: 0;
+        padding: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .dispdiv {
+        border: 2px solid #ccc;
+        margin: 10px;
+        border-radius: 5px;
+        padding: 5px;
+      }
+
+      .latestMessage {
+        margin-left: 20px;
+        color: #6d6b6b;
+      }
+
+      #chatMessages {
+        overflow-y: scroll; /* Always show vertical scrollbar */
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+      }
+
+      .chat-header button {
+        margin-left: auto; /* Pushes the button to the right end */
+      }
+
+      .user-name-container {
+        margin-left: auto; /* Moves the user's name to the right */
+      }
+
+      .user-name-container:hover {
+        color: #fab3ad;
+        cursor: pointer;
+      }
+
+      #profile-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        overflow-y: auto; /* Use overflow-y for vertical scrolling */
+        display: "none";
+      }
+
+      /* Style for the profile heading */
+      #profile-container h5 {
+        font-size: 1.5em;
+        color: #333;
+      }
+
+      /* Style for individual profile fields */
+      .profile-field {
+        width: 100%;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Style for labels in the profile */
+      .profile-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
+      }
+
+      /* Style for user data */
+      .profile-data {
+        font-size: 1.2em;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      #searchUserButton {
+        cursor: pointer;
+      }
+
+      .header-right {
+        cursor: pointer;
+      }
+    </style>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      function sendMessage(message) {}
+
+      // Example: Receive a chat message
+      socket.on("chat message", (message) => {
+        console.log("Received message:", message);
+        // Handle the received message as needed
+      });
+    </script>
+  </head>
+
+  <body>
+    <!--------------------------------------------------- CHAT USERS  --------------------------------------------->
+    <div class="chat-container">
+      <div class="user-list" id="userList">
+        <div class="chat-header">
+          <div class="header-left">
+            <img
+              src="/images/simply-logos_white.png"
+              class="logo"
+              height="100px"
+              alt=""
+            />
+            <div id="searchUserButton" onclick="search()">
+              <i class="fas fa-search"></i>
+              <span>Search User</span>
+            </div>
+            <div class="header-right" onclick="addNewGroup()">
+              <img src="/images/plus-lg-white.svg" class="add-img" alt="" />
+              <span>New Group</span>
+            </div>
+          </div>
+        </div>
+
+        <ul id="userListItems">
+          <% for (var i = 0; i < results.length; i++) { %> <% if
+          (!results[i].isGroupChat) {
+          if(results[i].users[0]._id==results.uId){%>
+          <li
+            class="user-list-item"
+            onclick="selectUser('<%= results[i].users[1].name %>','<%= results[i]._id %>')"
+          >
+            <img
+              src="<%= results[i].users[1].pic %>"
+              alt="<%= results[i].users[1].name %>"
+            />
+            <span><%= results[i].users[1].name %></span>
+            <% const obj = results[i].toObject(); %> <% if
+            (obj.hasOwnProperty("latestMessage")) { %>
+            <p class="latestMessage"><%= results[i].latestMessage.content %></p>
+            <% } %>
+          </li>
+          <%} else{%>
+          <li
+            class="user-list-item"
+            onclick="selectUser('<%= results[i].users[0].name %>','<%= results[i]._id %>')"
+          >
+            <img
+              src="<%= results[i].users[0].pic %>"
+              alt="<%= results[i].users[0].name %>"
+            />
+            <span><%= results[i].users[0].name %></span>
+            <% const obj = results[i].toObject(); %> <% if
+            (obj.hasOwnProperty("latestMessage")) { %>
+            <p class="latestMessage"><%= results[i].latestMessage.content %></p>
+            <% } %>
+          </li>
+          <%}%> <% } else { %>
+          <li
+            class="user-list-item"
+            onclick="selectUser('<%= results[i].chatName %>','<%= results[i]._id %>')"
+          >
+            <img
+              src="<%= results[i].users[1].pic %>"
+              alt="<%= results[i].users[1].name %>"
+            />
+            <span><%= results[i].chatName %></span>
+            <% const obj = results[i].toObject(); %> <% if
+            (obj.hasOwnProperty("latestMessage")) { %>
+            <p class="latestMessage"><%= results[i].latestMessage.content %></p>
+            <% } %>
+          </li>
+          <% } %> <% } %>
+        </ul>
+      </div>
+      <!------------------------------------------------- CHAT AREA ------------------------------------------------->
+      <div class="chat-area">
+        <div class="chat-header">
+          <pre> Chat with <span id="selectedUser">Select a user </span></pre>
+          <div class="user-name-container">
+            <div id="profile" name="Profile" onclick="profile()">
+              <% results[0].users.forEach(user => { if (user._id == results.uId)
+              { %> <%= user.name %> <% } }) %>
+            </div>
+          </div>
+          <!-- <button onclick="logout()">Logout</button> -->
+        </div>
+
+        <div class="messages" id="chatMessages">
+          <!-- Messages will be dynamically added here -->
+        </div>
+        <form id="sendForm">
+          <div class="input-container">
+            <input
+              type="text"
+              id="messageInput"
+              placeholder="Type your message..."
+              name="content"
+            />
+            <input type="text" value="" name="chatId" id="chatId" hidden />
+            <button type="submit">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!---------------------------------------------- MODAL Group creation---------------------------------------------------->
+    <div id="groupModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Create New Group</h2>
+        <input type="text" id="userSearchModal" placeholder="Search users" />
+        <button onclick="searchUsersModal()">search</button>
+        <div id="selectedUserList" class="dispdiv"></div>
+        <div
+          id="userListGrp"
+          class="dispdiv"
+          placeholer="User details will be displayed here"
+        ></div>
+        <div id="submissionList">
+          <form method="post" id="submissionListForm">
+            <input type="text" name="name" placeholder="Enter group name" />
+            <button type="submit" onclick="createGroup()">Create Group</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!------------------------------------- MODAL Search ----------------------------------------------------------------->
+    <div id="searchModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" onclick="closeModal1()">&times;</span>
+        <h2>Search Users</h2>
+        <input type="text" id="userSearch" placeholder="Search users" />
+        <button onclick="searchUsers()">search</button>
+        <div
+          id="userListSearch"
+          class="dispdiv"
+          placeholer="User details will be displayed here"
+        ></div>
+      </div>
+    </div>
+    <!-----------------------------------------------PROFILE ------------------------------------------------------->
+    <div id="profile-container" class="modal">
+      <h5>User Profile</h5>
+      <div class="modal-content">
+        <div class="profile-field">
+          <label class="profile-label">Name:</label>
+          <div class="profile-data">
+            <% results[0].users.forEach(user => { if (user._id == results.uId) {
+            %> <%= user.name %> <% } }) %>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label class="profile-label">Email:</label>
+          <div class="profile-data">
+            <% results[0].users.forEach(user => { if (user._id == results.uId) {
+            %> <%= user.email; %> <% } }) %>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <label class="profile-label">User Id:</label>
+          <div class="profile-data">results.uId</div>
+        </div>
+
+        <div class="profile-field">
+          <button onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+    <!------------------------------------------- SCRIPT ----------------------------------------------------------->
+    <script>
+      function selectUser(username, chatId) {
+        document.getElementById("chatMessages").innerHTML = "";
+
+        document.getElementById("selectedUser").textContent = username;
+        const userItems = document.querySelectorAll(".user-list-item");
+        userItems.forEach((item) => {
+          item.classList.remove("selected-user");
+        });
+        event.target.classList.add("selected-user");
+        console.log(chatId);
+
+        fetch(`/chats/${chatId}`, { method: "POST" })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // Handle the response data here
+            console.log("Received data:", data);
+
+            const chId = document.getElementById("chatId");
+            chId.value = chatId;
+
+            const selectedUser =
+              document.getElementById("selectedUser").textContent;
+            const messageInput = document.getElementById("messageInput");
+            const chatMessages = document.getElementById("chatMessages");
+            for (var i = 0; i < data.length; i++) {
+              const messageDiv = document.createElement("div");
+              messageDiv.classList.add("message", "sent");
+
+              const senderElement = document.createElement("div");
+              senderElement.classList.add("sender");
+              senderElement.textContent = data[i].sender.name;
+
+              const contentElement = document.createElement("div");
+              contentElement.classList.add("content");
+              chatMessages;
+              contentElement.textContent = data[i].content;
+
+              messageDiv.appendChild(senderElement);
+              messageDiv.appendChild(contentElement);
+
+              chatMessages.appendChild(messageDiv);
+            }
+            // For example, update UI with the chat details
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+            // Handle error, if necessary
+          });
+        scrollToBottom();
+
+        // fetch(`/chats/${chatId}`, { method: "GET" });
+        // .then(window.location.reload())
+        // .catch((error) => console.error("Error:", error));
+      }
+
+      function searchUsers() {
+        // console.log("im here in search function");
+
+        const q = document.getElementById("userSearch").value;
+        console.log(JSON.stringify({ q }));
+        fetch("/chats/search", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ q }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const foundUsers = document.getElementById("userListSearch");
+            foundUsers.innerHTML = "";
+            if (data.length === 0) {
+              foundUsers.innerHTML = "No such user found";
+            }
+            for (var i = 0; i < data.length; i++) {
+              // Create form element
+              const form = document.createElement("form");
+              form.setAttribute("method", "POST");
+              form.classList.add("user-item-form"); // Add a class for styling or identification
+
+              // Create hidden input for fetched user ID
+              const fetchedUserInput = document.createElement("input");
+              fetchedUserInput.setAttribute("type", "hidden");
+              fetchedUserInput.setAttribute("name", "userId");
+              fetchedUserInput.value = data[i]._id; // Assuming the user ID is stored in data[i].userId
+              form.appendChild(fetchedUserInput);
+
+              // Create submit button
+              const submitButton = document.createElement("button");
+              submitButton.setAttribute("type", "submit");
+              submitButton.setAttribute("name", "submit");
+              submitButton.textContent = data[i].name; // Replace with the name of the fetched user
+              form.appendChild(submitButton);
+
+              // Add form to the user list
+              foundUsers.appendChild(form);
+
+              // Add event listener to the form
+              form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+                const formData = new FormData(this);
+                let formDataJson = {};
+
+                // Iterate over form data entries
+                for (let [key, value] of formData.entries()) {
+                  formDataJson[key] = value;
+                }
+
+                // Convert the object to JSON
+                let jsonData = JSON.stringify(formDataJson);
+                // console.log(formDataJson);
+                fetch("/chats", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: jsonData,
+                })
+                  .then((response) => response.json())
+                  .then((d) => {
+                    // console.log(data);
+                    // selectUser(data[i].name, d._id);
+                    window.location.reload();
+                  });
+                // You can now access form data and submit the form using fetch
+                // Example: fetch('/your/api/endpoint', { method: 'POST', body: formData });
+              });
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function updateUsersList(users) {
+        const userList = document.getElementById("userListItems");
+        userList.innerHTML = "";
+        users.forEach((user) => {
+          const listItem = document.createElement("li");
+          listItem.className = "user-list-item";
+          listItem.textContent = user.name;
+          userList.appendChild(listItem);
+        });
+      }
+
+      // Function to open the modal
+      function addNewGroup() {
+        document.getElementById("groupModal").style.display = "block";
+      }
+
+      // Function to close the modal
+      function closeModal() {
+        document.getElementById("groupModal").style.display = "none";
+        // document.getElementById("searchModal").style.display = "none";
+        // document.getElementById("userListSearch").innerHTML = "";
+      }
+      function closeModal1() {
+        // document.getElementById("groupModal").style.display = "none";
+        document.getElementById("searchModal").style.display = "none";
+        document.getElementById("userListSearch").innerHTML = "";
+      }
+
+      // Function to search for users in the modal
+      function searchUsersModal() {
+        const q = document.getElementById("userSearchModal").value;
+        // Fetch users based on the search query and populate the modal
+        // console.log(JSON.stringify({ q }));
+        fetch("/chats/search", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ q }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const foundUsers = document.getElementById("userListGrp");
+            foundUsers.innerHTML = "";
+
+            for (var i = 0; i < data.length; i++) {
+              const name = data[i].name;
+              const id = data[i]._id;
+
+              // Create form element
+              const form = document.createElement("form");
+              form.setAttribute("method", "POST");
+              form.classList.add("user-item-form"); // Add a class for styling or identification
+
+              // Create hidden input for fetched user ID
+              // const fetchedUserInput = document.createElement("input");
+              // fetchedUserInput.setAttribute("type", "hidden");
+              // fetchedUserInput.setAttribute("name", "userId");
+              // fetchedUserInput.value = id; // Assuming the user ID is stored in data[i]._id
+              // form.appendChild(fetchedUserInput);
+
+              // Create submit button
+              const submitButton = document.createElement("button");
+              submitButton.setAttribute("type", "submit");
+              submitButton.setAttribute("name", "submit");
+              submitButton.textContent = name; // Replace with the name of the fetched user
+              form.appendChild(submitButton);
+
+              // Add form to the user list
+              foundUsers.appendChild(form);
+
+              // Add event listener to the form
+              form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Append the selected user to the selectedUserList div
+                const selectedUserList =
+                  document.getElementById("selectedUserList");
+                const selectedUserButton = document.createElement("button");
+                selectedUserButton.textContent = name; // Replace with the name of the selected user
+                selectedUserList.appendChild(selectedUserButton);
+
+                // Create hidden input for selected user ID and append it to the submissionListForm
+                const submissionListForm =
+                  document.getElementById("submissionListForm");
+                const selectedUserInput = document.createElement("input");
+                // selectedUserInput.setAttribute("type", "hidden");
+                selectedUserInput.setAttribute("name", "users");
+                selectedUserInput.value = id; // Assuming the user ID is stored in data[i]._id
+                submissionListForm.appendChild(selectedUserInput);
+
+                // Add cross button
+                const crossButton = document.createElement("button");
+                crossButton.classList.add("cross-button");
+                crossButton.innerHTML = "&#10006;"; // Unicode for cross symbol
+                selectedUserButton.appendChild(crossButton);
+
+                // Add event listener to the cross button
+                crossButton.addEventListener("click", function () {
+                  // Remove the button and associated hidden input
+                  selectedUserButton.remove();
+                  selectedUserInput.remove();
+                });
+              });
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      // Function to create a new group
+      function createGroup() {
+        event.preventDefault();
+        // Gather selected users and create a new group
+        console.log("in the function");
+        const form = document.getElementById("submissionListForm");
+        // form.preventDefault();
+        const formData = new FormData(form);
+        let formDataJson = {};
+        console.log(formData);
+        // Iterate over form data entries
+        for (let [key, value] of formData.entries()) {
+          if (formDataJson.hasOwnProperty(key)) {
+            if (typeof formDataJson[key] !== Array) {
+              let v = formDataJson[key];
+              formDataJson[key] = [];
+              formDataJson[key].push(v);
+            }
+            formDataJson[key].push(value);
+          } else {
+            formDataJson[key] = value;
+          }
+        }
+
+        // Convert the object to JSON
+        let jsonData = JSON.stringify(formDataJson);
+        console.log(jsonData);
+        fetch("/chats/group", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            window.location.reload();
+          });
+      }
+
+      var usersAdded = [];
+      var data = [
+        {
+          _id: "1231",
+          name: "User1",
+          email: "user1@example.com",
+          profilePhoto: "/images/user1.jpg",
+        },
+        {
+          _id: "1232",
+          name: "User2",
+          email: "user2@example.com",
+          profilePhoto: "/images/user2.jpg",
+        },
+        {
+          _id: "1233",
+          name: "User3",
+          email: "user3@example.com",
+          profilePhoto: "/images/user3.jpg",
+        },
+        // Add more user objects as needed
+      ];
+      function getUserDataAndAppend(useremail) {
+        //get the user data and display
+        useremail = "user1@example.com";
+
+        const user = data.find((user) => user.email === useremail);
+        //user contains the extracted data from the database
+
+        const present = usersAdded.find((users) => users.email === useremail);
+        if (!present) {
+          usersAdded.push(user);
+          console.log(usersAdded);
+
+          const userDetailsDiv = document.getElementById("selectedUserList");
+          userDetailsDiv.innerHTML = "";
+
+          // Create and append user details to the div
+          const detailElement = document.createElement("p");
+          detailElement.innerHTML = `<strong>name:</strong> ${user.name}`;
+          userDetailsDiv.appendChild(detailElement);
+        }
+      }
+
+      function search() {
+        document.getElementById("searchModal").style.display = "block";
+      }
+
+      document
+        .getElementById("sendForm")
+        .addEventListener("submit", function (event) {
+          // Prevent default form submission
+          event.preventDefault();
+
+          // Serialize form data
+          var formData = new FormData(this);
+          let formDataJson = {};
+
+          // Iterate over form data entries
+          for (let [key, value] of formData.entries()) {
+            formDataJson[key] = value;
+          }
+
+          // Convert the object to JSON
+          let jsonData = JSON.stringify(formDataJson);
+          console.log(formDataJson);
+
+          fetch("/chats/send", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: jsonData, // Convert message object to JSON
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              socket.emit("send message", data);
+            });
+          document.getElementById("messageInput").value = "";
+
+          // Send AJAX request
+          // fetch("/chats/send", {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json", // Specify content type as JSON
+          //   },
+          //   body: jsonData,
+          // })
+          //   .then((response) => response.json())
+          //   .then((data) => {
+          //     socket.emit("chat message", data.content);
+          //     const chatMessages = document.getElementById("chatMessages");
+          //     const userDiv = document.createElement("div");
+          //     const messageDiv = document.createElement("div");
+          //     messageDiv.classList.add("message", "sent");
+
+          //     const senderElement = document.createElement("div");
+          //     senderElement.classList.add("sender");
+          //     senderElement.textContent = data.sender.name;
+
+          //     const contentElement = document.createElement("div");
+          //     contentElement.classList.add("content");
+          //     contentElement.textContent = data.content;
+
+          //     messageDiv.appendChild(senderElement);
+          //     messageDiv.appendChild(contentElement);
+
+          //     chatMessages.appendChild(messageDiv);
+          //     document.getElementById("messageInput").value = "";
+          //     console.log("Response:", data);
+          //   })
+          //   .catch((error) => {
+          //     // Handle errors
+          //     console.error("Error:", error);
+          //   });
+        });
+
+      function logout() {
+        fetch("/chats/logout", { method: "GET" })
+          .then(() => {
+            // Redirect the user to the login page or perform any other actions after logout
+            window.location.href = "/"; // Replace '/login' with your login route
+          })
+          .catch((error) => {
+            console.error("Error logging out:", error);
+            // Handle any errors that occur during the logout process
+          });
+      }
+
+      function profile() {
+        var profileContainer = document.getElementById("profile-container");
+        var currentDisplayStyle = profileContainer.style.display;
+
+        if (currentDisplayStyle === "block") {
+          profileContainer.style.display = "none";
+        } else {
+          profileContainer.style.display = "block";
+        }
+      }
+
+      // Listen for "chat message" event from the server
+      socket.on("chat message", (data) => {
+        console.log("Received message:", data);
+
+        // Send the received message to the server to save it
+        // fetch("/chats/send", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify(message), // Convert message object to JSON
+        // })
+        //   .then((response) => response.json())
+        //   .then((data) => {
+        // Emit a new "chat message" event to update other clients
+        // socket.emit("chat message", data.content);
+
+        // Update the UI with the received message
+        const chatMessages = document.getElementById("chatMessages");
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message", "sent");
+
+        const senderElement = document.createElement("div");
+        senderElement.classList.add("sender");
+        senderElement.textContent = data.sender.name;
+
+        const contentElement = document.createElement("div");
+        contentElement.classList.add("content");
+        contentElement.textContent = data.content;
+
+        messageDiv.appendChild(senderElement);
+        messageDiv.appendChild(contentElement);
+
+        chatMessages.appendChild(messageDiv);
+        document.getElementById("messageInput").value = "";
+        console.log("Response:", data);
+        scrollToBottom();
+      });
+      //     .catch((error) => {
+      //       console.error("Error:", error);
+      //     });
+      // });
+
+      // io.on("connection", (socket) => {
+      //   socket.on("chat message", (msg) => {
+      //     console.log("message: " + msg);
+      //   });
+      // });
+      function scrollToBottom() {
+        var chatContainer = document.getElementById("chatMessages");
+        console.log("Scroll Top:", chatContainer.scrollTop);
+        console.log("Scroll Height:", chatContainer.scrollHeight);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    </script>
+  </body>
+</html>
