@@ -77,7 +77,7 @@ const fetchChats = asyncHandler(async (req, res) => {
         //         console.log(results[i].latestMessage.content);
         //     }
         //     // results[i].uId = req.user.id;
-        // console.log(results);
+        console.log(results[2].groupAdmin.name);
         // }
         results.uId = req.user.id;
         // console.log(results[0].users[1]._id);

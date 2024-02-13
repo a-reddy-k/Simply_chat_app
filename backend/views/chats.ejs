@@ -8,298 +8,12 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
-
-    <style>
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-      }
-
-      .chat-container {
-        display: flex;
-        height: 100%;
-        max-width: 100%;
-        margin: 20px auto;
-        background-color: #fff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      }
-      .chat-header {
-        overflow: hidden;
-      }
-      .header-left {
-        overflow: hidden;
-      }
-
-      .user-list {
-        flex: 1;
-        overflow-y: auto;
-        padding: 20px;
-        border-right: 1px solid #ccc;
-      }
-
-      .chat-area {
-        flex: 2;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        overflow-y: auto;
-      }
-
-      .chat-header {
-        background-color: #3498db;
-        color: #fff;
-        padding: 10px;
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .header-left {
-        display: flex;
-        align-items: center;
-      }
-
-      .logo {
-        margin-right: 10px; /* Adjust margin as needed */
-      }
-
-      .add-img {
-        width: 24px; /* Adjust width as needed */
-        height: 24px; /* Adjust height as needed */
-        margin-right: 5px; /* Adjust margin as needed */
-      }
-
-      .user-list-item {
-        list-style: none;
-        margin: 0;
-        padding: 10px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-      }
-
-      .user-list-item img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        margin-right: 10px;
-      }
-
-      .user-list-item:hover {
-        background-color: #f5f5f5;
-      }
-
-      .selected-user {
-        background-color: #f5f5f5;
-      }
-
-      .messages {
-        margin-top: 20px;
-        flex: 1;
-      }
-
-      .message {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 15px;
-      }
-
-      .message .sender {
-        font-size: 12px;
-        color: #888;
-      }
-
-      .message .content {
-        background-color: #fff;
-        border-radius: 10px;
-        padding: 10px;
-        max-width: 70%;
-        word-wrap: break-word;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      }
-
-      .input-container {
-        display: flex;
-        background-color: #fff;
-        padding: 10px;
-        border-top: 1px solid #ccc;
-      }
-
-      input[type="text"] {
-        flex: 1;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-      }
-
-      button {
-        background-color: #128c7e;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 15px;
-        cursor: pointer;
-        margin-left: 10px;
-      }
-
-      button:hover {
-        background-color: #075e54;
-      }
-      .logo {
-        margin-right: 10px;
-      }
-      .add-img {
-        margin-left: 15px;
-      }
-
-      /* Model CSS*/
-
-      .modal {
-        display: none; /* Hide the modal by default */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-        z-index: 1000; /* Ensure the modal is above other content */
-        overflow: auto; /* Enable scrolling if needed */
-      }
-
-      .modal-content {
-        background-color: #fefefe; /* Modal background color */
-        margin: 20% auto; /* Center the modal vertically and horizontally */
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Box shadow for a raised effect */
-        max-width: 400px; /* Adjust the maximum width as needed */
-      }
-
-      .close {
-        color: #aaa; /* Close button color */
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-      }
-
-      .close:hover,
-      .close:focus {
-        color: black; /* Close button color on hover */
-        text-decoration: none;
-        cursor: pointer;
-      }
-
-      #userSearchModal {
-        margin-right: 20px;
-        border: 1px solid #ccc; /* Add a border */
-        border-radius: 5px; /* Add some border radius for better appearance */
-        padding: 5px; /* Add padding for better spacing */
-        width: 100%; /* Make the input fill the entire width of the modal */
-        box-sizing: border-box; /* Include padding and border in the element's total width and height */
-      }
-
-      .user-list-item-modal {
-        list-style: none;
-        margin: 0;
-        padding: 10px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .dispdiv {
-        border: 2px solid #ccc;
-        margin: 10px;
-        border-radius: 5px;
-        padding: 5px;
-      }
-
-      .latestMessage {
-        margin-left: 20px;
-        color: #6d6b6b;
-      }
-
-      #chatMessages {
-        overflow-y: scroll; /* Always show vertical scrollbar */
-        overflow-x: hidden; /* Hide horizontal scrollbar */
-      }
-
-      .chat-header button {
-        margin-left: auto; /* Pushes the button to the right end */
-      }
-
-      .user-name-container {
-        margin-left: auto; /* Moves the user's name to the right */
-      }
-
-      .user-name-container:hover {
-        color: #fab3ad;
-        cursor: pointer;
-      }
-
-      #profile-container {
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        overflow-y: auto; /* Use overflow-y for vertical scrolling */
-        display: "none";
-      }
-
-      /* Style for the profile heading */
-      #profile-container h5 {
-        font-size: 1.5em;
-        color: #333;
-      }
-
-      /* Style for individual profile fields */
-      .profile-field {
-        width: 100%;
-        margin-bottom: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      /* Style for labels in the profile */
-      .profile-label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #555;
-      }
-
-      /* Style for user data */
-      .profile-data {
-        font-size: 1.2em;
-        color: #333;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      #searchUserButton {
-        cursor: pointer;
-      }
-
-      .header-right {
-        cursor: pointer;
-      }
-    </style>
-
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+    <link
+      rel="icon"
+      href="/images/simply-logos_white1.png"
+      type="image/x-icon"
+    />
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
@@ -341,45 +55,65 @@
           <% for (var i = 0; i < results.length; i++) { %> <% if
           (!results[i].isGroupChat) {
           if(results[i].users[0]._id==results.uId){%>
-          <li
-            class="user-list-item"
-            onclick="selectUser('<%= results[i].users[1].name %>','<%= results[i]._id %>')"
-          >
+          <li class="user-list-item">
             <img
               src="<%= results[i].users[1].pic %>"
               alt="<%= results[i].users[1].name %>"
+              data-user-details="<%= JSON.stringify(results[i].users[1]) %>"
             />
-            <span><%= results[i].users[1].name %></span>
+            <input
+              type="text"
+              class="chatterId"
+              value="<%= results[i]._id %>"
+              hidden
+            />
+            <span
+              onclick="selectUser('<%= results[i].users[1].name %>','<%= results[i]._id %>')"
+              ><%= results[i].users[1].name %></span
+            >
             <% const obj = results[i].toObject(); %> <% if
             (obj.hasOwnProperty("latestMessage")) { %>
             <p class="latestMessage"><%= results[i].latestMessage.content %></p>
             <% } %>
           </li>
           <%} else{%>
-          <li
-            class="user-list-item"
-            onclick="selectUser('<%= results[i].users[0].name %>','<%= results[i]._id %>')"
-          >
+          <li class="user-list-item">
             <img
               src="<%= results[i].users[0].pic %>"
               alt="<%= results[i].users[0].name %>"
+              data-user-details="<%= JSON.stringify(results[i].users[0]) %>"
             />
-            <span><%= results[i].users[0].name %></span>
+            <input
+              type="text"
+              class="chatterId"
+              value="<%= results[i]._id %>"
+              hidden
+            />
+            <span
+              onclick="selectUser('<%= results[i].users[0].name %>','<%= results[i]._id %>')"
+              ><%= results[i].users[0].name %></span
+            >
             <% const obj = results[i].toObject(); %> <% if
             (obj.hasOwnProperty("latestMessage")) { %>
             <p class="latestMessage"><%= results[i].latestMessage.content %></p>
             <% } %>
           </li>
           <%}%> <% } else { %>
-          <li
-            class="user-list-item"
-            onclick="selectUser('<%= results[i].chatName %>','<%= results[i]._id %>')"
-          >
+          <li class="user-list-item">
             <img
               src="<%= results[i].users[1].pic %>"
               alt="<%= results[i].users[1].name %>"
             />
-            <span><%= results[i].chatName %></span>
+            <input
+              type="text"
+              class="chatterId"
+              value="<%= results[i]._id %>"
+              hidden
+            />
+            <span
+              onclick="selectUser('<%= results[i].chatName %>','<%= results[i]._id %>','<%= results[i].groupAdmin.name %>')"
+              ><%= results[i].chatName %></span
+            >
             <% const obj = results[i].toObject(); %> <% if
             (obj.hasOwnProperty("latestMessage")) { %>
             <p class="latestMessage"><%= results[i].latestMessage.content %></p>
@@ -392,10 +126,16 @@
       <div class="chat-area">
         <div class="chat-header">
           <pre> Chat with <span id="selectedUser">Select a user </span></pre>
-          <div class="user-name-container">
+          <div class="user-name-container" id="titleChat">
             <div id="profile" name="Profile" onclick="profile()">
               <% results[0].users.forEach(user => { if (user._id == results.uId)
               { %> <%= user.name %> <% } }) %>
+              <input
+                type="text"
+                value="<%= results.uId %>"
+                id="current-user-id"
+                hidden
+              />
             </div>
           </div>
           <!-- <button onclick="logout()">Logout</button> -->
@@ -480,6 +220,7 @@
         <div class="profile-field">
           <label class="profile-label">User Id:</label>
           <div class="profile-data">results.uId</div>
+          <!-- <input type="text" id="current-user-id" value="results.uId" hidden /> -->
         </div>
 
         <div class="profile-field">
@@ -487,12 +228,31 @@
         </div>
       </div>
     </div>
+    <!--------------------------------------------CHATTING PROFILE-------------------------------------------------->
+    <div id="userDetailsModal" class="modal">
+      <div class="modal-content">
+        <div id="userDetails">
+          <img id="chat-user-pic" src="" alt="" />
+          <div>
+            Name: <span id="chat-user-name"></span><br />
+            email: <span id="chat-user-email"></span><br />
+            id: <span id="chat-user-id"></span>
+          </div>
+        </div>
+      </div>
+    </div>
     <!------------------------------------------- SCRIPT ----------------------------------------------------------->
     <script>
-      function selectUser(username, chatId) {
+      function selectUser(username, chatId, adminName = null) {
         document.getElementById("chatMessages").innerHTML = "";
-
+        var title = document.getElementById("titleChat");
         document.getElementById("selectedUser").textContent = username;
+
+        if (adminName !== null) {
+          document.getElementById(
+            "selectedUser"
+          ).textContent = `${username} Admin: ${adminName}`;
+        }
         const userItems = document.querySelectorAll(".user-list-item");
         userItems.forEach((item) => {
           item.classList.remove("selected-user");
@@ -680,13 +440,6 @@
               form.setAttribute("method", "POST");
               form.classList.add("user-item-form"); // Add a class for styling or identification
 
-              // Create hidden input for fetched user ID
-              // const fetchedUserInput = document.createElement("input");
-              // fetchedUserInput.setAttribute("type", "hidden");
-              // fetchedUserInput.setAttribute("name", "userId");
-              // fetchedUserInput.value = id; // Assuming the user ID is stored in data[i]._id
-              // form.appendChild(fetchedUserInput);
-
               // Create submit button
               const submitButton = document.createElement("button");
               submitButton.setAttribute("type", "submit");
@@ -773,50 +526,6 @@
           .then((data) => {
             window.location.reload();
           });
-      }
-
-      var usersAdded = [];
-      var data = [
-        {
-          _id: "1231",
-          name: "User1",
-          email: "user1@example.com",
-          profilePhoto: "/images/user1.jpg",
-        },
-        {
-          _id: "1232",
-          name: "User2",
-          email: "user2@example.com",
-          profilePhoto: "/images/user2.jpg",
-        },
-        {
-          _id: "1233",
-          name: "User3",
-          email: "user3@example.com",
-          profilePhoto: "/images/user3.jpg",
-        },
-        // Add more user objects as needed
-      ];
-      function getUserDataAndAppend(useremail) {
-        //get the user data and display
-        useremail = "user1@example.com";
-
-        const user = data.find((user) => user.email === useremail);
-        //user contains the extracted data from the database
-
-        const present = usersAdded.find((users) => users.email === useremail);
-        if (!present) {
-          usersAdded.push(user);
-          console.log(usersAdded);
-
-          const userDetailsDiv = document.getElementById("selectedUserList");
-          userDetailsDiv.innerHTML = "";
-
-          // Create and append user details to the div
-          const detailElement = document.createElement("p");
-          detailElement.innerHTML = `<strong>name:</strong> ${user.name}`;
-          userDetailsDiv.appendChild(detailElement);
-        }
       }
 
       function search() {
@@ -933,25 +642,66 @@
         // socket.emit("chat message", data.content);
 
         // Update the UI with the received message
-        const chatMessages = document.getElementById("chatMessages");
-        const messageDiv = document.createElement("div");
-        messageDiv.classList.add("message", "sent");
+        let noti = false;
+        var chId = document.getElementById("chatId").value;
+        var curUser = document.getElementById("current-user-id").value;
+        for (var i = 0; i < data.chat.users.length; i++) {
+          // console.log(data.chat.users[i]._id, curUser);
+          if (data.chat.users[i]._id === curUser) {
+            noti = true;
+            break;
+          }
+        }
+        // console.log(chId, data.chat._id);
+        if (data.chat._id === chId) {
+          console.log("inside If");
+          const chatMessages = document.getElementById("chatMessages");
+          const messageDiv = document.createElement("div");
+          messageDiv.classList.add("message", "sent");
 
-        const senderElement = document.createElement("div");
-        senderElement.classList.add("sender");
-        senderElement.textContent = data.sender.name;
+          const senderElement = document.createElement("div");
+          senderElement.classList.add("sender");
+          senderElement.textContent = data.sender.name;
 
-        const contentElement = document.createElement("div");
-        contentElement.classList.add("content");
-        contentElement.textContent = data.content;
+          const contentElement = document.createElement("div");
+          contentElement.classList.add("content");
+          contentElement.textContent = data.content;
 
-        messageDiv.appendChild(senderElement);
-        messageDiv.appendChild(contentElement);
+          messageDiv.appendChild(senderElement);
+          messageDiv.appendChild(contentElement);
 
-        chatMessages.appendChild(messageDiv);
-        document.getElementById("messageInput").value = "";
-        console.log("Response:", data);
-        scrollToBottom();
+          chatMessages.appendChild(messageDiv);
+          document.getElementById("messageInput").value = "";
+          console.log("Response:", data);
+          scrollToBottom();
+        } else if (noti) {
+          console.log("valid");
+          // var chats = document.getElementsByClassName("chatterId");
+          // var userItemList = Array.from(
+          //   document.getElementsByClassName("user-list-item")
+          // );
+          // // console.log(userItemList);
+          // for (var i = 0; i < chats.length; i++) {
+          //   if (chats[i].value === data.chat._id) {
+          //     console.log("in here");
+          //     var redDot = document.createElement("div");
+
+          //     // Apply styles to make it a red dot
+          //     redDot.setAttribute("class", "redDot");
+          //     redDot.style.width = "10px";
+          //     redDot.style.height = "10px";
+          //     redDot.style.backgroundColor = "red";
+          //     redDot.style.borderRadius = "50%"; // Makes it round
+          //     redDot.style.position = "absolute";
+          //     redDot.style.top = "0";
+          //     redDot.style.right = "0";
+          //     userItemList[i].appendChild(redDot);
+          //     console.log(userItemList[i]);
+          //     break;
+          //   }
+          // }
+          // console.log(chats);
+        }
       });
       //     .catch((error) => {
       //       console.error("Error:", error);
@@ -969,6 +719,50 @@
         console.log("Scroll Height:", chatContainer.scrollHeight);
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
+
+      /*----------------------------------------------USER Profiles-------------------------------------------------------*/
+      var modal = document.getElementById("userDetailsModal");
+
+      // Get the <span> element that closes the modal
+      var closeBtn = document.querySelector(".close");
+
+      // Function to open the modal and populate user details
+      function openModal(userDetails) {
+        var parsedUserDetails = JSON.parse(userDetails);
+        var userDetailsDiv = document.getElementById("userDetails");
+        var name = document.getElementById("chat-user-name");
+        name.textContent = parsedUserDetails.name;
+        var email = document.getElementById("chat-user-email");
+        email.textContent = parsedUserDetails.email;
+        var id = document.getElementById("chat-user-id");
+        id.textContent = parsedUserDetails._id;
+        var profileImage = document.getElementById("chat-user-pic");
+        profileImage.src = parsedUserDetails.pic;
+        modal.style.display = "block";
+      }
+
+      // Function to close the modal
+      function closeModal() {
+        modal.style.display = "none";
+      }
+
+      // Event listener for clicks on images
+      var images = document.querySelectorAll(".user-list-item img");
+      images.forEach(function (image) {
+        image.addEventListener("click", function () {
+          // Extract user details associated with the clicked image
+          var userDetails = this.getAttribute("data-user-details");
+          // Open the modal with the extracted user details
+          openModal(userDetails);
+        });
+      });
+
+      // Event listener for clicks outside the modal to close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          closeModal();
+        }
+      };
     </script>
   </body>
 </html>
