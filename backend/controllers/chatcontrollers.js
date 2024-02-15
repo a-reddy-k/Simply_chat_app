@@ -77,11 +77,17 @@ const fetchChats = asyncHandler(async (req, res) => {
         //         console.log(results[i].latestMessage.content);
         //     }
         //     // results[i].uId = req.user.id;
-        console.log(results[2].groupAdmin.name);
+        // console.log(results[2].groupAdmin.name);
         // }
         results.uId = req.user.id;
-        // console.log(results[0].users[1]._id);
+        results.name = req.user.name;
+        results.email = req.user.email;
+        results.pic = req.user.pic;
+        // console.log(req.user.name);
+        // console.log(req.user);
         // console.log(req.user.id)
+        console.log(typeof results[0]);
+
         res.render("chats", { results });
       });
   } catch (error) {
@@ -150,47 +156,82 @@ const renameGroup = asyncHandler(async (req, res) => {
 
 const addToGroup = asyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
+  console.log(req.body);
 
-  const added = await Chat.findByIdAndUpdate(
-    chatId,
-    {
-      $push: { users: userId },
-    },
-    {
-      new: true,
+  const chat = await Chat.findOne(chatId);
+  if (req.user.id === chat.groupAdmin) {
+    const added = await Chat.findByIdAndUpdate(
+      chatId,
+      {
+        $push: { users: userId },
+      },
+      {
+        new: true,
+      }
+    )
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password");
+
+    if (!added) {
+      res.status(404);
+      throw new Error("Chat Not Found");
+    } else {
+      res.json(added);
     }
-  )
-    .populate("users", "-password")
-    .populate("groupAdmin", "-password");
-
-  if (!added) {
-    res.status(404);
-    throw new Error("Chat Not Found");
   } else {
-    res.json(added);
+    res.send("You Are Not Admin");
   }
 });
 
 const removeFromGroup = asyncHandler(async (req, res) => {
+  console.log(req.body);
   const { chatId, userId } = req.body;
+  const chat = await Chat.findOne(chatId);
+  if (req.user.id === chat.groupAdmin) {
+    const removed = await Chat.findByIdAndUpdate(
+      chatId,
+      {
+        $pull: { users: userId },
+      },
+      {
+        new: true,
+      }
+    )
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password");
 
-  const removed = await Chat.findByIdAndUpdate(
-    chatId,
+    if (!removed) {
+      res.status(404);
+      throw new Error("Chat Not Found");
+    } else {
+      if (removed.users.length < 2) {
+        await Chat.findByIdAndDelete(chatId);
+      }
+      res.json(removed);
+    }
+  } else {
+    res.send("You Are Not Admin");
+  }
+});
+
+const updatePic = asyncHandler(async (req, res, next) => {
+  const { userId, pic } = req.body;
+
+  const updatedPic = await Chat.findByIdAndUpdate(
+    userId,
     {
-      $pull: { users: userId },
+      pic,
     },
     {
       new: true,
     }
-  )
-    .populate("users", "-password")
-    .populate("groupAdmin", "-password");
+  ).populate("users", "-password");
 
-  if (!removed) {
+  if (!updatedPic) {
     res.status(404);
     throw new Error("Chat Not Found");
   } else {
-    res.json(removed);
+    res.json(updatedPic);
   }
 });
 
@@ -201,4 +242,5 @@ module.exports = {
   renameGroup,
   addToGroup,
   removeFromGroup,
+  updatePic,
 };

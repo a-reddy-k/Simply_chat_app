@@ -8,6 +8,7 @@
 var app = require("../app");
 var debug = require("debug")("backend:server");
 var http = require("http");
+const socketIo = require("socket.io");
 
 /**
  * Get port from environment and store in Express.
@@ -98,16 +99,39 @@ function onListening() {
 // });
 
 // In your server-side code (app.js or wherever your server logic resides)
-const io = require("socket.io")(server);
+// const io = require("socket.io")(server);
 
 // Listen for connection events from clients
+
+const io = socketIo(server, {
+  cors: {
+    origin: "http://127.0.0.1:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
 io.on("connection", (socket) => {
   console.log(`socket ${socket.id} connected`);
 
   // Listen for send message event
-  socket.on("send message", (data) => {
-    // Broadcast the received message to all clients
-    io.emit("chat message", data);
+
+  socket.on("join-room", (room) => {
+    socket.join(room);
+    var users = io.sockets.adapter.rooms;
+    // console.log(users);
+    // console.log(`joined room ${room}`);
+
+    socket.on("exit-room", (e) => {
+      socket.leave(room);
+      // var users = io.sockets.adapter.rooms;
+      // console.log(users);
+      console.log(`exited room ${room}`);
+    });
+  });
+
+  socket.on("chat message", (room, msg) => {
+    console.log(`Message in room ${room}: ${msg}`);
+    io.to(room).emit("chat message", msg);
   });
 
   // Handle disconnection

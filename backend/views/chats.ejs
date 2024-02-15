@@ -14,22 +14,17 @@
       href="/images/simply-logos_white1.png"
       type="image/x-icon"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
-
-      function sendMessage(message) {}
-
-      // Example: Receive a chat message
-      socket.on("chat message", (message) => {
-        console.log("Received message:", message);
-        // Handle the received message as needed
-      });
     </script>
+
+    <style></style>
   </head>
 
+  <!--------------------------------------------------- CHAT USERS  --------------------------------------------->
   <body>
-    <!--------------------------------------------------- CHAT USERS  --------------------------------------------->
     <div class="chat-container">
       <div class="user-list" id="userList">
         <div class="chat-header">
@@ -50,77 +45,95 @@
             </div>
           </div>
         </div>
+        <div class="usersDiv">
+          <% if(typeof(results[0])==="object"){%>
 
-        <ul id="userListItems">
-          <% for (var i = 0; i < results.length; i++) { %> <% if
-          (!results[i].isGroupChat) {
-          if(results[i].users[0]._id==results.uId){%>
-          <li class="user-list-item">
-            <img
-              src="<%= results[i].users[1].pic %>"
-              alt="<%= results[i].users[1].name %>"
-              data-user-details="<%= JSON.stringify(results[i].users[1]) %>"
-            />
-            <input
-              type="text"
-              class="chatterId"
-              value="<%= results[i]._id %>"
-              hidden
-            />
-            <span
-              onclick="selectUser('<%= results[i].users[1].name %>','<%= results[i]._id %>')"
-              ><%= results[i].users[1].name %></span
-            >
-            <% const obj = results[i].toObject(); %> <% if
-            (obj.hasOwnProperty("latestMessage")) { %>
-            <p class="latestMessage"><%= results[i].latestMessage.content %></p>
-            <% } %>
-          </li>
-          <%} else{%>
-          <li class="user-list-item">
-            <img
-              src="<%= results[i].users[0].pic %>"
-              alt="<%= results[i].users[0].name %>"
-              data-user-details="<%= JSON.stringify(results[i].users[0]) %>"
-            />
-            <input
-              type="text"
-              class="chatterId"
-              value="<%= results[i]._id %>"
-              hidden
-            />
-            <span
-              onclick="selectUser('<%= results[i].users[0].name %>','<%= results[i]._id %>')"
-              ><%= results[i].users[0].name %></span
-            >
-            <% const obj = results[i].toObject(); %> <% if
-            (obj.hasOwnProperty("latestMessage")) { %>
-            <p class="latestMessage"><%= results[i].latestMessage.content %></p>
-            <% } %>
-          </li>
-          <%}%> <% } else { %>
-          <li class="user-list-item">
-            <img
-              src="<%= results[i].users[1].pic %>"
-              alt="<%= results[i].users[1].name %>"
-            />
-            <input
-              type="text"
-              class="chatterId"
-              value="<%= results[i]._id %>"
-              hidden
-            />
-            <span
-              onclick="selectUser('<%= results[i].chatName %>','<%= results[i]._id %>','<%= results[i].groupAdmin.name %>')"
-              ><%= results[i].chatName %></span
-            >
-            <% const obj = results[i].toObject(); %> <% if
-            (obj.hasOwnProperty("latestMessage")) { %>
-            <p class="latestMessage"><%= results[i].latestMessage.content %></p>
-            <% } %>
-          </li>
-          <% } %> <% } %>
-        </ul>
+          <ul id="userListItems">
+            <% for (var i = 0; i < results.length; i++) { %> <% if
+            (!results[i].isGroupChat) {
+            if(results[i].users[0]._id==results.uId){%>
+            <li class="user-list-item">
+              <img
+                src="<%= results[i].users[1].pic %>"
+                alt="<%= results[i].users[1].name %>"
+                data-user-details="<%= JSON.stringify(results[i].users[1]) %>"
+              />
+              <input
+                type="text"
+                class="chatterId"
+                value="<%= results[i]._id %>"
+                hidden
+              />
+              <div>
+                <span
+                  onclick="selectUser('<%= results[i].users[1].name %>','<%= results[i]._id %>')"
+                  ><%= results[i].users[1].name %></span
+                >
+                <% const obj = results[i].toObject(); %> <% if
+                (obj.hasOwnProperty("latestMessage")) { %>
+                <p class="latestMessage">
+                  <%= results[i].latestMessage.content %>
+                </p>
+                <% } %>
+              </div>
+            </li>
+            <%} else{%>
+            <li class="user-list-item">
+              <img
+                src="<%= results[i].users[0].pic %>"
+                alt="<%= results[i].users[0].name %>"
+                data-user-details="<%= JSON.stringify(results[i].users[0]) %>"
+              />
+              <input
+                type="text"
+                class="chatterId"
+                value="<%= results[i]._id %>"
+                hidden
+              />
+              <div>
+                <span
+                  onclick="selectUser('<%= results[i].users[0].name %>','<%= results[i]._id %>')"
+                  ><%= results[i].users[0].name %></span
+                >
+                <% const obj = results[i].toObject(); %> <% if
+                (obj.hasOwnProperty("latestMessage")) { %>
+                <p class="latestMessage">
+                  <%= results[i].latestMessage.content %>
+                </p>
+                <% } %>
+              </div>
+            </li>
+            <%}%> <% } else { %>
+            <li class="users-list-item">
+              <img
+                src="<%= results[i].users[1].pic %>"
+                alt="<%= results[i].users[1].name %>"
+                data-users-details="<%= JSON.stringify(results[i]) %>"
+              />
+              <!-- <%= JSON.stringify(results[i].users) %> -->
+              <input
+                type="text"
+                class="chatterId"
+                value="<%= results[i]._id %>"
+                hidden
+              />
+              <div>
+                <span
+                  onclick="selectUser('<%= results[i].chatName %>','<%= results[i]._id %>','<%= results[i].groupAdmin.name %>')"
+                  ><%= results[i].chatName %></span
+                >
+                <% const obj = results[i].toObject(); %> <% if
+                (obj.hasOwnProperty("latestMessage")) { %>
+                <p class="latestMessage">
+                  <%= results[i].latestMessage.content %>
+                </p>
+                <% } %>
+              </div>
+            </li>
+            <% } %> <% } %>
+          </ul>
+          <%}%>
+        </div>
       </div>
       <!------------------------------------------------- CHAT AREA ------------------------------------------------->
       <div class="chat-area">
@@ -128,8 +141,10 @@
           <pre> Chat with <span id="selectedUser">Select a user </span></pre>
           <div class="user-name-container" id="titleChat">
             <div id="profile" name="Profile" onclick="profile()">
-              <% results[0].users.forEach(user => { if (user._id == results.uId)
-              { %> <%= user.name %> <% } }) %>
+              <div>
+                <img class="profileImg" src="<%= results.pic %>" alt="" />
+              </div>
+              <%= results.name%>
               <input
                 type="text"
                 value="<%= results.uId %>"
@@ -146,6 +161,9 @@
         </div>
         <form id="sendForm">
           <div class="input-container">
+            <div class="clip-symbol" onclick="documentsModal()">
+              <i class="fas fa-paperclip"></i>
+            </div>
             <input
               type="text"
               id="messageInput"
@@ -199,28 +217,31 @@
     </div>
     <!-----------------------------------------------PROFILE ------------------------------------------------------->
     <div id="profile-container" class="modal">
-      <h5>User Profile</h5>
       <div class="modal-content">
+        <span class="close" onclick="closeProfileModal()">&times;</span>
+        <div class="profileimg">
+          <img class="profilepic" src="<%= results.pic%>" alt="" />
+          <button class="changeProfilePic" onclick="changeProfilePic()">
+            Update profile Pic
+          </button>
+        </div>
         <div class="profile-field">
-          <label class="profile-label">Name:</label>
-          <div class="profile-data">
-            <% results[0].users.forEach(user => { if (user._id == results.uId) {
-            %> <%= user.name %> <% } }) %>
-          </div>
+          <!-- <label class="profile-label">Name:</label> -->
+
+          <div class="profile-data">Name: <%= results.name%></div>
         </div>
 
         <div class="profile-field">
-          <label class="profile-label">Email:</label>
-          <div class="profile-data">
-            <% results[0].users.forEach(user => { if (user._id == results.uId) {
-            %> <%= user.email; %> <% } }) %>
-          </div>
+          <!-- <label class="profile-label">Email:</label> -->
+
+          <div class="profile-data">email: <%= results.email%></div>
         </div>
 
         <div class="profile-field">
-          <label class="profile-label">User Id:</label>
-          <div class="profile-data">results.uId</div>
-          <!-- <input type="text" id="current-user-id" value="results.uId" hidden /> -->
+          <!-- <label class="profile-label">User Id:</label> -->
+
+          <div class="profile-data">Id: <%= results.uId %></div>
+          <input type="text" id="current-user-id" value="results.uId" hidden />
         </div>
 
         <div class="profile-field">
@@ -231,6 +252,7 @@
     <!--------------------------------------------CHATTING PROFILE-------------------------------------------------->
     <div id="userDetailsModal" class="modal">
       <div class="modal-content">
+        <span class="close" onclick="closeModalChattedProfile()">&times;</span>
         <div id="userDetails">
           <img id="chat-user-pic" src="" alt="" />
           <div>
@@ -241,17 +263,89 @@
         </div>
       </div>
     </div>
+    <!---------------------------------------------MODAL FOR GROUP ------------------------------------------------->
+
+    <div id="grpDetailsModal" class="modal">
+      <div class="modal-content">
+        <div id="grpDetails">
+          <div class="addgrpDiv">
+            <span class="addgrpheading">Group Members: </span>
+            <img
+              class="addIntoGroup"
+              src="/images/plus-lg-black.svg"
+              alt=""
+              title="Add New Member "
+              onclick="addIntoGroup()"
+            />
+          </div>
+          <div id="grpUsers" class="user-list"></div>
+        </div>
+      </div>
+    </div>
+    <!-------------------------------------------Add To group Modal------------------------------------------------->
+    <div id="searchModalAdd" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" onclick="closeModalAdd()">&times;</span>
+        <h2>Add New User To Group</h2>
+        <input type="text" id="userSearchAdd" placeholder="Search users" />
+        <button onclick="addNewUserToGrp()">search</button>
+        <div
+          id="userListAdd"
+          class="dispdiv"
+          placeholer="User details will be displayed here"
+        ></div>
+      </div>
+    </div>
+    <!-----------------------------------------Update Pic Modal----------------------------------------------------->
+    <div id="updateProfileModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeUpdatePicModal()">&times;</span>
+        <div id="userDetails">
+          <form
+            action="/chats/updateProfilePic"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <input
+              type="file"
+              id="profilePic"
+              name="profilePic"
+              accept="image/*"
+            />
+            <button type="submit">Update Pic</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!----------------------------------------------Send Documents Modal-------------------------------------------->
+    <div id="documentsModalId" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeDoucumentsModal()">&times;</span>
+        <div id="userDetails">
+          <form method="POST" enctype="multipart/form-data" id="docSendForm">
+            <input type="file" id="document" name="document" />
+            <button type="submit">Create Link</button>
+          </form>
+        </div>
+      </div>
+    </div>
     <!------------------------------------------- SCRIPT ----------------------------------------------------------->
     <script>
+      var room = undefined;
+      var curUserId = document.getElementById("current-user-id").value;
       function selectUser(username, chatId, adminName = null) {
         document.getElementById("chatMessages").innerHTML = "";
         var title = document.getElementById("titleChat");
         document.getElementById("selectedUser").textContent = username;
 
         if (adminName !== null) {
-          document.getElementById(
-            "selectedUser"
-          ).textContent = `${username} Admin: ${adminName}`;
+          var heading = document.getElementById("selectedUser");
+          // ).textContent = `${username} Admin: ${adminName}`;
+          var div = document.createElement("div");
+          div.setAttribute("class", "adminName");
+          div.textContent = `Admin: ${adminName}`;
+          heading.appendChild(div);
         }
         const userItems = document.querySelectorAll(".user-list-item");
         userItems.forEach((item) => {
@@ -274,35 +368,94 @@
             const chId = document.getElementById("chatId");
             chId.value = chatId;
 
+            socket.emit("exit-room", "");
+            socket.emit("join-room", chatId);
+
+            // socket.on("connectioToRoom", chatId);
+            // io.socket.in(chatId).emit("join-room" + chatId);
+
             const selectedUser =
               document.getElementById("selectedUser").textContent;
             const messageInput = document.getElementById("messageInput");
             const chatMessages = document.getElementById("chatMessages");
             for (var i = 0; i < data.length; i++) {
-              const messageDiv = document.createElement("div");
-              messageDiv.classList.add("message", "sent");
+              // console.log(data[i].sender._id, curUserId);
+              if (curUserId == data[i].sender._id) {
+                const messageDiv = document.createElement("div");
+                messageDiv.classList.add("Cur-message", "sent");
+                // messageDiv.setAttribute("class", "cursent-user-div");
 
-              const senderElement = document.createElement("div");
-              senderElement.classList.add("sender");
-              senderElement.textContent = data[i].sender.name;
+                const senderElement = document.createElement("div");
+                senderElement.classList.add("Cur-sender");
+                senderElement.textContent = "You";
+                // console.log("Im here");
 
-              const contentElement = document.createElement("div");
-              contentElement.classList.add("content");
-              chatMessages;
-              contentElement.textContent = data[i].content;
+                const contentElement = document.createElement("div");
+                contentElement.classList.add("Cur-content");
+                // chatMessages;
+                // contentElement.textContent = data[i].content;
+                if (isURL(data[i].content)) {
+                  const link = document.createElement("a");
+                  link.setAttribute("href", data[i].content);
+                  link.innerHTML = "Document Sent";
+                  contentElement.appendChild(link);
+                } else {
+                  contentElement.textContent = data[i].content;
+                }
 
-              messageDiv.appendChild(senderElement);
-              messageDiv.appendChild(contentElement);
+                const timeElement = document.createElement("div");
+                timeElement.classList.add("Cur-sender");
+                timeElement.textContent = moment(data.createdAt).format(
+                  " D MMMM YYYY, h:mm:ss A"
+                );
 
-              chatMessages.appendChild(messageDiv);
+                messageDiv.appendChild(senderElement);
+                messageDiv.appendChild(contentElement);
+                messageDiv.appendChild(timeElement);
+
+                chatMessages.appendChild(messageDiv);
+              } else {
+                const messageDiv = document.createElement("div");
+                messageDiv.classList.add("message", "sent");
+                // messageDiv.setAttribute("class", "other-user-div");
+
+                const senderElement = document.createElement("div");
+                senderElement.classList.add("sender");
+                senderElement.textContent = data[i].sender.name;
+
+                const contentElement = document.createElement("div");
+                contentElement.classList.add("content");
+                // chatMessages;
+                // contentElement.textContent = data[i].content;
+                if (isURL(data[i].content)) {
+                  const link = document.createElement("a");
+                  link.setAttribute("href", data[i].content);
+                  link.innerHTML = "Document Recived";
+                  contentElement.appendChild(link);
+                } else {
+                  contentElement.textContent = data[i].content;
+                }
+
+                const timeElement = document.createElement("div");
+                timeElement.classList.add("sender");
+                timeElement.textContent = moment(data.createdAt).format(
+                  " D MMMM YYYY, h:mm:ss A"
+                );
+
+                messageDiv.appendChild(senderElement);
+                messageDiv.appendChild(contentElement);
+                messageDiv.appendChild(timeElement);
+
+                chatMessages.appendChild(messageDiv);
+              }
             }
+            scrollToBottom();
             // For example, update UI with the chat details
           })
           .catch((error) => {
             console.error("Fetch error:", error);
             // Handle error, if necessary
           });
-        scrollToBottom();
 
         // fetch(`/chats/${chatId}`, { method: "GET" });
         // .then(window.location.reload())
@@ -374,7 +527,7 @@
                 })
                   .then((response) => response.json())
                   .then((d) => {
-                    // console.log(data);
+                    console.log(d);
                     // selectUser(data[i].name, d._id);
                     window.location.reload();
                   });
@@ -404,12 +557,12 @@
 
       // Function to close the modal
       function closeModal() {
+        console.log("here");
         document.getElementById("groupModal").style.display = "none";
         // document.getElementById("searchModal").style.display = "none";
         // document.getElementById("userListSearch").innerHTML = "";
       }
       function closeModal1() {
-        // document.getElementById("groupModal").style.display = "none";
         document.getElementById("searchModal").style.display = "none";
         document.getElementById("userListSearch").innerHTML = "";
       }
@@ -465,7 +618,7 @@
                 const submissionListForm =
                   document.getElementById("submissionListForm");
                 const selectedUserInput = document.createElement("input");
-                // selectedUserInput.setAttribute("type", "hidden");
+                selectedUserInput.setAttribute("type", "hidden");
                 selectedUserInput.setAttribute("name", "users");
                 selectedUserInput.value = id; // Assuming the user ID is stored in data[i]._id
                 submissionListForm.appendChild(selectedUserInput);
@@ -501,10 +654,18 @@
         // Iterate over form data entries
         for (let [key, value] of formData.entries()) {
           if (formDataJson.hasOwnProperty(key)) {
+            // console.log(typeof(formDataJson[key]));
             if (typeof formDataJson[key] !== Array) {
               let v = formDataJson[key];
+              console.log(typeof v);
               formDataJson[key] = [];
-              formDataJson[key].push(v);
+              if (Array.isArray(v)) {
+                for (var k = 0; k < v.length; k++) {
+                  formDataJson[key].push(v[k]);
+                }
+              } else {
+                formDataJson[key].push(v);
+              }
             }
             formDataJson[key].push(value);
           } else {
@@ -531,7 +692,7 @@
       function search() {
         document.getElementById("searchModal").style.display = "block";
       }
-
+      //---------------------------------------SendMsg-----------------------------------
       document
         .getElementById("sendForm")
         .addEventListener("submit", function (event) {
@@ -560,45 +721,17 @@
           })
             .then((response) => response.json())
             .then((data) => {
-              socket.emit("send message", data);
+              room = data.chat._id;
+              // console.log(data.content);
+              socket.emit("chat message", room, data);
+
+              // socket.on(room, (data) => {
+              //   console.log("Received message:", data);
+              // });
+              // Assuming you have the socket instance available
+              // socket.to(data.chat._id).emit("send message", data);
             });
           document.getElementById("messageInput").value = "";
-
-          // Send AJAX request
-          // fetch("/chats/send", {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json", // Specify content type as JSON
-          //   },
-          //   body: jsonData,
-          // })
-          //   .then((response) => response.json())
-          //   .then((data) => {
-          //     socket.emit("chat message", data.content);
-          //     const chatMessages = document.getElementById("chatMessages");
-          //     const userDiv = document.createElement("div");
-          //     const messageDiv = document.createElement("div");
-          //     messageDiv.classList.add("message", "sent");
-
-          //     const senderElement = document.createElement("div");
-          //     senderElement.classList.add("sender");
-          //     senderElement.textContent = data.sender.name;
-
-          //     const contentElement = document.createElement("div");
-          //     contentElement.classList.add("content");
-          //     contentElement.textContent = data.content;
-
-          //     messageDiv.appendChild(senderElement);
-          //     messageDiv.appendChild(contentElement);
-
-          //     chatMessages.appendChild(messageDiv);
-          //     document.getElementById("messageInput").value = "";
-          //     console.log("Response:", data);
-          //   })
-          //   .catch((error) => {
-          //     // Handle errors
-          //     console.error("Error:", error);
-          //   });
         });
 
       function logout() {
@@ -627,20 +760,6 @@
       // Listen for "chat message" event from the server
       socket.on("chat message", (data) => {
         console.log("Received message:", data);
-
-        // Send the received message to the server to save it
-        // fetch("/chats/send", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify(message), // Convert message object to JSON
-        // })
-        //   .then((response) => response.json())
-        //   .then((data) => {
-        // Emit a new "chat message" event to update other clients
-        // socket.emit("chat message", data.content);
-
         // Update the UI with the received message
         let noti = false;
         var chId = document.getElementById("chatId").value;
@@ -653,54 +772,80 @@
           }
         }
         // console.log(chId, data.chat._id);
+        console.log(data);
         if (data.chat._id === chId) {
-          console.log("inside If");
-          const chatMessages = document.getElementById("chatMessages");
-          const messageDiv = document.createElement("div");
-          messageDiv.classList.add("message", "sent");
+          if (data.sender._id === curUser) {
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("Cur-message", "sent");
+            // messageDiv.setAttribute("class", "cursent-user-div");
 
-          const senderElement = document.createElement("div");
-          senderElement.classList.add("sender");
-          senderElement.textContent = data.sender.name;
+            const senderElement = document.createElement("div");
+            senderElement.classList.add("Cur-sender");
+            senderElement.textContent = "You";
+            console.log("Im here");
 
-          const contentElement = document.createElement("div");
-          contentElement.classList.add("content");
-          contentElement.textContent = data.content;
+            const contentElement = document.createElement("div");
+            contentElement.classList.add("Cur-content");
+            // chatMessages;
+            // console.log(isURL(data.content));
+            if (isURL(data.content)) {
+              const link = document.createElement("a");
+              link.setAttribute("href", data.content);
+              link.innerHTML = "Document Sent";
+              contentElement.appendChild(link);
+            } else {
+              contentElement.textContent = data.content;
+            }
 
-          messageDiv.appendChild(senderElement);
-          messageDiv.appendChild(contentElement);
+            const timeElement = document.createElement("div");
+            timeElement.classList.add("sender");
+            timeElement.textContent = moment(data.createdAt).format(
+              " D MMMM YYYY, h:mm:ss A"
+            );
 
-          chatMessages.appendChild(messageDiv);
-          document.getElementById("messageInput").value = "";
-          console.log("Response:", data);
-          scrollToBottom();
+            messageDiv.appendChild(senderElement);
+            messageDiv.appendChild(contentElement);
+            messageDiv.appendChild(timeElement);
+
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+          } else {
+            const chatMessages = document.getElementById("chatMessages");
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", "sent");
+
+            const senderElement = document.createElement("div");
+            senderElement.classList.add("sender");
+            senderElement.textContent = data.sender.name;
+
+            const contentElement = document.createElement("div");
+            contentElement.classList.add("content");
+            if (isURL(data.content)) {
+              const link = document.createElement("a");
+              link.setAttribute("href", data.content);
+              link.innerHTML = "Document Recived";
+              contentElement.appendChild(link);
+            } else {
+              contentElement.textContent = data.content;
+            }
+
+            const timeElement = document.createElement("div");
+            timeElement.classList.add("Cur-sender");
+            timeElement.textContent = moment(data.createdAt).format(
+              " D MMMM YYYY, h:mm:ss A"
+            );
+
+            messageDiv.appendChild(senderElement);
+            messageDiv.appendChild(contentElement);
+            messageDiv.appendChild(timeElement);
+
+            chatMessages.appendChild(messageDiv);
+            document.getElementById("messageInput").value = "";
+            console.log("Response:", data);
+            scrollToBottom();
+          }
         } else if (noti) {
           console.log("valid");
-          // var chats = document.getElementsByClassName("chatterId");
-          // var userItemList = Array.from(
-          //   document.getElementsByClassName("user-list-item")
-          // );
-          // // console.log(userItemList);
-          // for (var i = 0; i < chats.length; i++) {
-          //   if (chats[i].value === data.chat._id) {
-          //     console.log("in here");
-          //     var redDot = document.createElement("div");
-
-          //     // Apply styles to make it a red dot
-          //     redDot.setAttribute("class", "redDot");
-          //     redDot.style.width = "10px";
-          //     redDot.style.height = "10px";
-          //     redDot.style.backgroundColor = "red";
-          //     redDot.style.borderRadius = "50%"; // Makes it round
-          //     redDot.style.position = "absolute";
-          //     redDot.style.top = "0";
-          //     redDot.style.right = "0";
-          //     userItemList[i].appendChild(redDot);
-          //     console.log(userItemList[i]);
-          //     break;
-          //   }
-          // }
-          // console.log(chats);
         }
       });
       //     .catch((error) => {
@@ -715,16 +860,11 @@
       // });
       function scrollToBottom() {
         var chatContainer = document.getElementById("chatMessages");
-        console.log("Scroll Top:", chatContainer.scrollTop);
-        console.log("Scroll Height:", chatContainer.scrollHeight);
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
 
       /*----------------------------------------------USER Profiles-------------------------------------------------------*/
-      var modal = document.getElementById("userDetailsModal");
-
-      // Get the <span> element that closes the modal
-      var closeBtn = document.querySelector(".close");
+      var modalChattedP = document.getElementById("userDetailsModal");
 
       // Function to open the modal and populate user details
       function openModal(userDetails) {
@@ -738,31 +878,321 @@
         id.textContent = parsedUserDetails._id;
         var profileImage = document.getElementById("chat-user-pic");
         profileImage.src = parsedUserDetails.pic;
-        modal.style.display = "block";
-      }
-
-      // Function to close the modal
-      function closeModal() {
-        modal.style.display = "none";
+        modalChattedP.style.display = "block";
       }
 
       // Event listener for clicks on images
       var images = document.querySelectorAll(".user-list-item img");
       images.forEach(function (image) {
         image.addEventListener("click", function () {
+          // console.log(this);
           // Extract user details associated with the clicked image
           var userDetails = this.getAttribute("data-user-details");
           // Open the modal with the extracted user details
+          // console.log(userDetails);
+
           openModal(userDetails);
+        });
+      });
+      function closeModalChattedProfile() {
+        document.getElementById("userDetailsModal").style.display = "none";
+      }
+
+      //--------------------------------------------GROUP MODAL------------------------------------------------------
+
+      var grpModal = document.getElementById("grpDetailsModal");
+
+      // Get the <span> element that closes the modal
+      var closeBtn = document.querySelector(".close");
+
+      // Function to open the modal and populate user details
+      function openModalGrp(userDetails) {
+        var parsedUserDetails = JSON.parse(userDetails);
+        // console.log(userDetails);
+        var userDetailsDiv = document.getElementById("grpDetails");
+        var namesDiv = document.getElementById("grpUsers");
+        namesDiv.innerHTML = "";
+        // console.log(parsedUserDetails.length);
+
+        let chatIdInput = document.createElement("input");
+        chatIdInput.setAttribute("id", "");
+        var chatId = parsedUserDetails._id;
+
+        var inputEleChatId = document.createElement("input");
+        inputEleChatId.setAttribute("type", "hidden");
+        inputEleChatId.setAttribute("name", "chatId");
+        inputEleChatId.setAttribute("id", "chatIdOfTheCurrentGrp"); // Set the name attribute
+        inputEleChatId.value = chatId;
+        namesDiv.appendChild(inputEleChatId);
+
+        for (var i = 0; i < parsedUserDetails.users.length; i++) {
+          var userId = parsedUserDetails.users[i]._id;
+
+          var inputEle = document.createElement("input");
+          inputEle.setAttribute("type", "hidden");
+          inputEle.setAttribute("name", "uId"); // Set the name attribute
+          inputEle.value = userId;
+
+          var namePara = document.createElement("div");
+          namePara.setAttribute("class", "modalDel");
+          namePara.textContent = parsedUserDetails.users[i].name;
+
+          const form = document.createElement("form");
+          form.setAttribute("method", "POST");
+          form.classList.add("users-item-form"); // Add a class for styling or identification
+
+          // Create submit button
+
+          form.appendChild(inputEle);
+
+          const submitButton = document.createElement("button");
+          submitButton.setAttribute("type", "submit");
+          submitButton.setAttribute("name", "submit");
+          submitButton.setAttribute("class", "delButton");
+          submitButton.textContent = "❌";
+          form.appendChild(submitButton);
+
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            console.log(formData.get("uId"));
+            removeUserFromDatabase(formData.get("uId"), chatId);
+          });
+
+          namePara.appendChild(form);
+          namesDiv.appendChild(namePara);
+        }
+
+        // namesDiv.textContent = userDetails;
+        grpModal.style.display = "block";
+      }
+
+      // Function to close the modal
+      function closeModalGrp() {
+        grpModal.style.display = "none";
+      }
+
+      // Event listener for clicks on images
+      var images = document.querySelectorAll(".users-list-item img");
+      images.forEach(function (image) {
+        image.addEventListener("click", function () {
+          // Extract user details associated with the clicked image
+          // console.log(this);
+          var userDetails = this.getAttribute("data-users-details");
+          // Open the modal with the extracted user details
+          // console.log(userDetails);
+          openModalGrp(userDetails);
         });
       });
 
       // Event listener for clicks outside the modal to close it
       window.onclick = function (event) {
-        if (event.target == modal) {
-          closeModal();
+        if (event.target == grpModal) {
+          closeModalGrp();
         }
       };
+
+      function removeUserFromDatabase(userId, chatId) {
+        var jsonData = {};
+        jsonData.chatId = chatId;
+        jsonData.userId = userId;
+        console.log(jsonData);
+        var js = JSON.stringify(jsonData);
+        fetch("/chats/groupremove", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: js,
+        }).then((response) => {
+          // response.json();
+          if (response.ok) {
+            // Display success alert
+            alert("User removed successfully!");
+            window.location.reload();
+          } else {
+            // Display error alert
+            alert("Only admin can remove User.");
+          }
+        });
+      }
+
+      //---------------------------------------------------Toggle-----------------------------------------------------
+      function toggleUserList() {
+        var userList = document.querySelector(".user-list");
+        userList.classList.toggle("toggle");
+      }
+
+      window.addEventListener("resize", function () {
+        var screenWidth = window.innerWidth;
+        var userList = document.querySelector(".user-list");
+        if (screenWidth <= 768 && !userList.classList.contains("toggle")) {
+          toggleUserList();
+        } else if (screenWidth > 768 && userList.classList.contains("toggle")) {
+          toggleUserList();
+        }
+      });
+
+      //--------------------------------------Add New Member Into Group----------------------------------------------
+
+      function addIntoGroup() {
+        document.getElementById("searchModalAdd").style.display = "block";
+      }
+
+      function addNewUserToGrp() {
+        const q = document.getElementById("userSearchAdd").value;
+        console.log(JSON.stringify({ q }));
+        fetch("/chats/search", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ q }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const foundUsers = document.getElementById("userListAdd");
+            foundUsers.innerHTML = "";
+            if (data.length === 0) {
+              foundUsers.innerHTML = "No such user found";
+            }
+            for (var i = 0; i < data.length; i++) {
+              // Create form element
+              const form = document.createElement("form");
+              form.setAttribute("method", "POST");
+              form.classList.add("user-item-form"); // Add a class for styling or identification
+
+              // Create hidden input for fetched user ID
+
+              const fetchedChatInput = document.createElement("input");
+              fetchedChatInput.setAttribute("type", "hidden");
+              fetchedChatInput.setAttribute("name", "chatId");
+              fetchedChatInput.value = document.getElementById(
+                "chatIdOfTheCurrentGrp"
+              ).value;
+              form.appendChild(fetchedChatInput);
+
+              const fetchedUserInput = document.createElement("input");
+              fetchedUserInput.setAttribute("type", "hidden");
+              fetchedUserInput.setAttribute("name", "userId");
+              fetchedUserInput.value = data[i]._id;
+              form.appendChild(fetchedUserInput);
+
+              // Create submit button
+              const submitButton = document.createElement("button");
+              submitButton.setAttribute("type", "submit");
+              submitButton.setAttribute("name", "submit");
+              submitButton.textContent = data[i].name; // Replace with the name of the fetched user
+              form.appendChild(submitButton);
+
+              // Add form to the user list
+              foundUsers.appendChild(form);
+
+              // Add event listener to the form
+              form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+                const formData = new FormData(this);
+                let formDataJson = {};
+                console.log("In here");
+                // Iterate over form data entries
+                for (let [key, value] of formData.entries()) {
+                  formDataJson[key] = value;
+                }
+
+                // Convert the object to JSON
+                let jsonData = JSON.stringify(formDataJson);
+                console.log(jsonData);
+                fetch("/chats/groupadd", {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: jsonData,
+                }).then((response) => {
+                  // response.json();
+                  if (response.ok) {
+                    // Display success alert
+                    alert("User removed successfully!");
+                    window.location.reload();
+                  } else {
+                    // Display error alert
+                    alert("Only admin can remove User.");
+                  }
+                });
+                // You can now access form data and submit the form using fetch
+                // Example: fetch('/your/api/endpoint', { method: 'POST', body: formData });
+              });
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function closeModalAdd() {
+        document.getElementById("searchModalAdd").style.display = "none";
+      }
+
+      //-------------------------------------------------------Update Profile Pic---------------------------------------------------
+
+      function changeProfilePic() {
+        document.getElementById("updateProfileModal").style.display = "block";
+      }
+
+      function closeUpdatePicModal() {
+        document.getElementById("updateProfileModal").style.display = "none";
+      }
+      //----------------------------------------------------------Send Documents----------------------------------------------------
+      function documentsModal() {
+        document.getElementById("documentsModalId").style.display = "block";
+      }
+
+      function closeDoucumentsModal() {
+        document.getElementById("documentsModalId").style.display = "none";
+      }
+
+      document
+        .getElementById("docSendForm")
+        .addEventListener("submit", function (event) {
+          // Prevent default form submission
+          event.preventDefault();
+          console.log("In here");
+          // Serialize form data
+          var formData = new FormData(this);
+          let formDataJson = {};
+
+          // Iterate over form data entries
+          for (let [key, value] of formData.entries()) {
+            formDataJson[key] = value;
+          }
+
+          // Convert the object to JSON
+          let jsonData = JSON.stringify(formDataJson);
+          console.log(formData);
+          fetch("/chats/sendDocuments", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => {
+              // console.log(response);
+              return response.json();
+            })
+            .then((data) => {
+              closeDoucumentsModal();
+              // console.log(typeof data);
+              const url = new URL(data);
+              document.getElementById("messageInput").value = url;
+            });
+        });
+
+      function isURL(str) {
+        // Regular expression to match a URL
+        const urlRegex =
+          /^(?:https?|ftp):\/\/[\w-]+(?:\.[\w-]+)+[\w.,@?^=%&:/~+#-]*$/;
+        return urlRegex.test(str);
+      }
+
+      function closeProfileModal() {
+        document.getElementById("profile-container").style.display = "none";
+      }
     </script>
   </body>
 </html>

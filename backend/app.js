@@ -3,6 +3,9 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const socketIo = require("socket.io");
+const http = require("http");
+require("dotenv").config();
 
 var indexRouter = require("./routes/index");
 // var usersRouter = require("./routes/users");
@@ -25,6 +28,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
+app.use(bodyParser.json({ limit: "10mb" }));
 
 connectDB();
 
@@ -52,4 +57,32 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: "http://127.0.0.1:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(`connected ${socket}`);
+
+  socket.on("join-room", (room) => {
+    socket.join(room);
+    console.log("joined room");
+  });
+
+  socket.on("send message", (data) => {
+    // Broadcast the received message to all clients
+    io.emit("chat message", data);
+  });
+
+  // Handle disconnection
+  socket.on("disconnect", (reason) => {
+    console.log(`socket ${socket.id} disconnected due to ${reason}`);
+  });
+});
+
 module.exports = app;
+// module.exports = io;
