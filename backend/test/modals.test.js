@@ -69,8 +69,10 @@ describe("Testing Message model", () => {
 
   it("it should throw an error due to missing fields", async () => {
     let msg = new Message();
+    console.log("here");
     try {
       await msg.validate();
+      //   console.log(err);
       throw new Error("Validation succeeded unexpectedly");
     } catch (err) {
       console.log(err);
@@ -131,18 +133,14 @@ describe("Chat Model", () => {
 
   it("should throw an error if required fields are missing", async () => {
     const chat = new Chat({
-      //   chatName: "Group Chat",
-      //   isGroupChat: true,
+      isGroupChat: true,
     });
 
     let error;
     try {
-      await chat.save();
-      console.log(chat);
+      await chat.validate();
     } catch (err) {
-      error = err;
+      expect(err.errors.chatName).to.exist;
     }
-    // console.log(error);
-    expect(error).to.exist;
   });
 });
