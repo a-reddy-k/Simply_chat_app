@@ -140,27 +140,24 @@ const addToGroup = asyncHandler(async (req, res) => {
   console.log(req.body);
 
   const chat = await Chat.findOne(chatId);
-  if (req.user.id === chat.groupAdmin) {
-    const added = await Chat.findByIdAndUpdate(
-      chatId,
-      {
-        $push: { users: userId },
-      },
-      {
-        new: true,
-      }
-    )
-      .populate("users", "-password")
-      .populate("groupAdmin", "-password");
 
-    if (!added) {
-      res.status(404);
-      throw new Error("Chat Not Found");
-    } else {
-      res.json(added);
+  const added = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $push: { users: userId },
+    },
+    {
+      new: true,
     }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!added) {
+    res.status(404);
+    throw new Error("Chat Not Found");
   } else {
-    res.send("You Are Not Admin");
+    res.json(added);
   }
 });
 
@@ -168,30 +165,26 @@ const removeFromGroup = asyncHandler(async (req, res) => {
   console.log(req.body);
   const { chatId, userId } = req.body;
   const chat = await Chat.findOne(chatId);
-  if (req.user.id === chat.groupAdmin) {
-    const removed = await Chat.findByIdAndUpdate(
-      chatId,
-      {
-        $pull: { users: userId },
-      },
-      {
-        new: true,
-      }
-    )
-      .populate("users", "-password")
-      .populate("groupAdmin", "-password");
-
-    if (!removed) {
-      res.status(404);
-      throw new Error("Chat Not Found");
-    } else {
-      if (removed.users.length < 2) {
-        await Chat.findByIdAndDelete(chatId);
-      }
-      res.json(removed);
+  const removed = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      $pull: { users: userId },
+    },
+    {
+      new: true,
     }
+  )
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+
+  if (!removed) {
+    res.status(404);
+    throw new Error("Chat Not Found");
   } else {
-    res.send("You Are Not Admin");
+    if (removed.users.length < 2) {
+      await Chat.findByIdAndDelete(chatId);
+    }
+    res.json(removed);
   }
 });
 

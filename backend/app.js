@@ -57,32 +57,5 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "http://127.0.0.1:3000",
-    methods: ["GET", "POST"],
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log(`connected ${socket}`);
-
-  socket.on("join-room", (room) => {
-    socket.join(room);
-    console.log("joined room");
-  });
-
-  socket.on("send message", (data) => {
-    // Broadcast the received message to all clients
-    io.emit("chat message", data);
-  });
-
-  // Handle disconnection
-  socket.on("disconnect", (reason) => {
-    console.log(`socket ${socket.id} disconnected due to ${reason}`);
-  });
-});
-
 module.exports = app;
 // module.exports = io;

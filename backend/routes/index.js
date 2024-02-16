@@ -28,7 +28,6 @@ router.post(
       var token = generateToken(user._id);
       console.log(token);
       res.cookie("access_token", token, {
-        // sameSite: 'None',
         secure: true,
         httpOnly: true,
         maxAge: 3600000 * 24,
