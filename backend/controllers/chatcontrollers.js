@@ -138,8 +138,8 @@ const renameGroup = asyncHandler(async (req, res) => {
 const addToGroup = asyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
   console.log(req.body);
-
-  const chat = await Chat.findOne(chatId);
+  console.log("here");
+  // const chat = await Chat.findOne(chatId);
 
   const added = await Chat.findByIdAndUpdate(
     chatId,
@@ -152,7 +152,7 @@ const addToGroup = asyncHandler(async (req, res) => {
   )
     .populate("users", "-password")
     .populate("groupAdmin", "-password");
-
+  // console.log("here");
   if (!added) {
     res.status(404);
     throw new Error("Chat Not Found");
@@ -164,7 +164,7 @@ const addToGroup = asyncHandler(async (req, res) => {
 const removeFromGroup = asyncHandler(async (req, res) => {
   console.log(req.body);
   const { chatId, userId } = req.body;
-  const chat = await Chat.findOne(chatId);
+  // const chat = await Chat.findOne(chatId);
   const removed = await Chat.findByIdAndUpdate(
     chatId,
     {

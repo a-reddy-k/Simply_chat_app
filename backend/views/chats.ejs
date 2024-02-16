@@ -1102,9 +1102,11 @@
                   body: jsonData,
                 }).then((response) => {
                   // response.json();
+                  console.log(response);
                   if (response.ok) {
                     // Display success alert
-                    alert("User removed successfully!");
+
+                    alert("User added successfully!");
                     window.location.reload();
                   } else {
                     // Display error alert
