@@ -10,21 +10,37 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-function sendMail(subject, email, htmlMessage) {
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: subject,
-    html: htmlMessage,
-  };
+function isValidEmail(email) {
+  // Regular expression for a simple email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
-  // Send email
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error("Error sending email:", error);
-    } else {
-      console.log("Email sent:", info.response);
-    }
+function sendMail(subject, email, htmlMessage) {
+  // console.log("here");
+
+  if (!isValidEmail(email)) {
+    throw new Error("Invalid email format");
+  }
+  return new Promise((resolve, reject) => {
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: subject,
+      html: htmlMessage,
+    };
+
+    // Send email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+        reject(error);
+      } else {
+        console.log("Email sent:", info.response);
+        // return info.response;
+        resolve("sent");
+      }
+    });
   });
 }
 

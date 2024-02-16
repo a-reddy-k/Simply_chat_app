@@ -132,6 +132,7 @@ body {
     color: #888;
     margin-left: 15px;
     margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 .message .content {
@@ -142,6 +143,7 @@ body {
     width: fit-content;
     word-wrap: break-word;
     padding: 10px 20px;
+    /* max-width: 70%; */
     /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); */
 }
 
@@ -601,6 +603,7 @@ button:hover {
     text-align: right;
     margin-right: 20px;
     margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 .Cur-message .Cur-content {

@@ -405,9 +405,7 @@
 
                 const timeElement = document.createElement("div");
                 timeElement.classList.add("Cur-sender");
-                timeElement.textContent = moment(data.createdAt).format(
-                  " D MMMM YYYY, h:mm:ss A"
-                );
+                timeElement.textContent = moment(data[i].createdAt).calendar();
 
                 messageDiv.appendChild(senderElement);
                 messageDiv.appendChild(contentElement);
@@ -438,9 +436,7 @@
 
                 const timeElement = document.createElement("div");
                 timeElement.classList.add("sender");
-                timeElement.textContent = moment(data.createdAt).format(
-                  " D MMMM YYYY, h:mm:ss A"
-                );
+                timeElement.textContent = moment(data[i].createdAt).calendar();
 
                 messageDiv.appendChild(senderElement);
                 messageDiv.appendChild(contentElement);
@@ -757,7 +753,7 @@
         }
       }
 
-      // Listen for "chat message" event from the server
+      //----------------------------------Socket Call-----------------------------------------------
       socket.on("chat message", (data) => {
         console.log("Received message:", data);
         // Update the UI with the received message
@@ -798,10 +794,8 @@
             }
 
             const timeElement = document.createElement("div");
-            timeElement.classList.add("sender");
-            timeElement.textContent = moment(data.createdAt).format(
-              " D MMMM YYYY, h:mm:ss A"
-            );
+            timeElement.classList.add("Cur-sender");
+            timeElement.textContent = moment(data.createdAt).calendar();
 
             messageDiv.appendChild(senderElement);
             messageDiv.appendChild(contentElement);
@@ -831,9 +825,7 @@
 
             const timeElement = document.createElement("div");
             timeElement.classList.add("Cur-sender");
-            timeElement.textContent = moment(data.createdAt).format(
-              " D MMMM YYYY, h:mm:ss A"
-            );
+            timeElement.textContent = moment(data.createdAt).calendar();
 
             messageDiv.appendChild(senderElement);
             messageDiv.appendChild(contentElement);

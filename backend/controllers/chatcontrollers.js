@@ -63,35 +63,16 @@ const fetchChats = asyncHandler(async (req, res) => {
           select: "name pic email",
         });
 
-        // res.status(200).send(results);
-        // var r = fetchChats();
-        // console.log(req.user.id)
-        // for (var i = 0; i < results.length; i++){
-        //     if (results[i].isGroupChat) {
-        //         console.log(results[i].chatName);
-        //     }
-        //     const plainObject = results[i].toObject();
-        //     // console.log(plainObject);
-        //     // console.log(Object.keys(plainObject))
-        //     if (plainObject.hasOwnProperty("latestMessage")) {
-        //         console.log(results[i].latestMessage.content);
-        //     }
-        //     // results[i].uId = req.user.id;
-        // console.log(results[2].groupAdmin.name);
-        // }
         results.uId = req.user.id;
         results.name = req.user.name;
         results.email = req.user.email;
         results.pic = req.user.pic;
-        // console.log(req.user.name);
-        // console.log(req.user);
-        // console.log(req.user.id)
         console.log(typeof results[0]);
 
-        res.render("chats", { results });
+        res.status(200).render("chats", { results });
       });
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error("Did not find chat");
   }
 });
 
