@@ -31,6 +31,7 @@ This is a simple chat application built using Node.js, Express, MongoDB (Mongoos
 ### 3. Create a .env file in the root directory with the following variables:
 
 PORT=3000
+
 MONGODB_URI=mongodb://localhost:27017/simply-chat
 
 JWT_SECRET=your_jwt_secret_key
