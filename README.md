@@ -26,10 +26,15 @@ npm install
 
 PORT=3000
 MONGODB_URI=mongodb://localhost:27017/simply-chat
+
 JWT_SECRET=your_jwt_secret_key
+
 S3_BUCKET_NAME=your_s3_bucket_name
+
 AWS_ACCESS_KEY_ID=your_aws_access_key_id
+
 AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+
 
 ### 4. Start the server:
 
