@@ -11,16 +11,22 @@ This is a simple chat application built using Node.js, Express, MongoDB (Mongoos
 - **Responsive Design:** Provides a responsive design using HTML and CSS for a seamless user experience across devices.
 - **Timestamp Formatting:** Uses Moment.js to format timestamps for messages and notifications.
 
+## Technologies Used
+- Backend: Node.js, Express.js, nodemailer.
+* Frontend: HTML, CSS, Bootstrap, JavaScript (EJS for templating), Momentjs.
++ Storage: MongoDB, S3.
+
 ## Installation
 
 ### 1. Clone the repository:
 
-git clone https://github.com/your-username/simply-chat-app.git
+```git clone https://github.com/your-username/simply-chat-app.git```
 
 ### 2.Install dependencies:
 
-cd simply-chat-app
-npm install
+```cd simply-chat-app```
+
+```npm install```
 
 ### 3. Create a .env file in the root directory with the following variables:
 
@@ -38,7 +44,7 @@ AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
 
 ### 4. Start the server:
 
-npm start
+```npm start```
 
 ## Usage:
 
