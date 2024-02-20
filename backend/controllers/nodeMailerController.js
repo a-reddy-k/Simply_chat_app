@@ -1,46 +1,30 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-// Create a nodemailer transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASSWORD,
-  },
-});
+function sendMail(email, text, sub) {
+  const mailOptions = {
+    from: process.env.Email,
+    to: email,
+    subject: sub,
+    html: text,
+  };
+  console.log(mailOptions);
+  // Create a nodemailer transporter
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.Email,
+      pass: process.env.Password,
+    },
+  });
 
-function isValidEmail(email) {
-  // Regular expression for a simple email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-function sendMail(subject, email, htmlMessage) {
-  // console.log("here");
-
-  if (!isValidEmail(email)) {
-    throw new Error("Invalid email format");
-  }
-  return new Promise((resolve, reject) => {
-    const mailOptions = {
-      from: process.env.EMAIL,
-      to: email,
-      subject: subject,
-      html: htmlMessage,
-    };
-
-    // Send email
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error sending email:", error);
-        reject(error);
-      } else {
-        console.log("Email sent:", info.response);
-        // return info.response;
-        resolve("sent");
-      }
-    });
+  // Send email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
   });
 }
 

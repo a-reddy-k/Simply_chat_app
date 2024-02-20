@@ -19,14 +19,14 @@ router.get("/", function (req, res, next) {
 router.post(
   "/",
   asyncHandler(async (req, res, next) => {
-    console.log(req.body);
+    // console.log(req.body);
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
       var token = generateToken(user._id);
-      console.log(token);
+      // console.log(token);
       res.cookie("access_token", token, {
         secure: true,
         httpOnly: true,

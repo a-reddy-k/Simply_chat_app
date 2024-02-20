@@ -1,25 +1,42 @@
 const chai = require("chai");
 const expect = chai.expect;
+const sinon = require("sinon");
+const nodemailer = require("nodemailer");
 
 const sendMail = require("../controllers/nodeMailerController");
 
-describe("Test sendMail", () => {
-  describe("send mail on valid mail-id", () => {
-    let email = "sample@gmail.com";
-    let subject = "sample sunject";
-    let html = "<p>Sample html</p>";
-    it("mail should be sent", async () => {
-      const actualResult = await sendMail(subject, email, html);
-      console.log(actualResult);
-      expect(actualResult).to.be.a("string").and.to.have.lengthOf(4);
-    }).timeout(5000);
+describe("Mail Middleware", () => {
+  it("should send email successfully", () => {
+    const email = "test@example.com";
+    const html = "<p>Test message</p>";
+
+    // Mock nodemailer
+    let stub = sinon.stub(nodemailer, "createTransport").returns({
+      sendMail: sinon.stub().yields(null, { response: "success" }),
+    });
+
+    sendMail(email, html);
+
+    expect(stub.calledOnce).to.be.true;
+    expect(stub().sendMail.calledOnce).to.be.true;
+
+    stub.restore();
   });
 
-  describe("throw error on invalid email", () => {
-    it("On error the function catches and returns not ok", async () => {
-      expect(() => {
-        sendMail();
-      }).to.throw();
+  it("should handle error in sending email", () => {
+    const email = "test@example.com";
+    const html = "<p>Test message</p>";
+
+    // Mock nodemailer
+    let stub = sinon.stub(nodemailer, "createTransport").returns({
+      sendMail: sinon.stub().yields(new Error("Error sending email")),
     });
+
+    sendMail(email, html);
+
+    expect(stub.calledOnce).to.be.true;
+    expect(stub().sendMail.calledOnce).to.be.true;
+
+    stub.restore();
   });
 });

@@ -9,6 +9,7 @@ var app = require("../app");
 var debug = require("debug")("backend:server");
 var http = require("http");
 const socketIo = require("socket.io");
+const { connectDB } = require("../db");
 
 /**
  * Get port from environment and store in Express.
@@ -21,15 +22,56 @@ app.set("port", port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server;
+connectDB().then(() => {
+  console.log("here");
+  server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+  const io = socketIo(server, {
+    cors: {
+      origin: "http://127.0.0.1:3000",
+      methods: ["GET", "POST"],
+    },
+  });
 
-server.listen(port);
-server.on("error", onError);
-server.on("listening", onListening);
+  io.on("connection", (socket) => {
+    console.log(`socket ${socket.id} connected`);
+
+    // Listen for send message event
+
+    socket.on("join-room", (room) => {
+      socket.join(room);
+      var users = io.sockets.adapter.rooms;
+      // console.log(users);
+      // console.log(`joined room ${room}`);
+
+      socket.on("exit-room", (e) => {
+        socket.leave(room);
+        // var users = io.sockets.adapter.rooms;
+        // console.log(users);
+        console.log(`exited room ${room}`);
+      });
+    });
+
+    socket.on("chat message", (room, msg) => {
+      // console.log(`Message in room ${room}: ${msg}`);
+      io.to(room).emit("chat message", msg);
+    });
+
+    // Handle disconnection
+    socket.on("disconnect", (reason) => {
+      console.log(`socket ${socket.id} disconnected due to ${reason}`);
+    });
+  });
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+
+  server.listen(port);
+  server.on("error", onError);
+  server.on("listening", onListening);
+});
 
 /**
  * Normalize a port into a number, string, or false.
@@ -102,40 +144,3 @@ function onListening() {
 // const io = require("socket.io")(server);
 
 // Listen for connection events from clients
-
-const io = socketIo(server, {
-  cors: {
-    origin: "http://127.0.0.1:3000",
-    methods: ["GET", "POST"],
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log(`socket ${socket.id} connected`);
-
-  // Listen for send message event
-
-  socket.on("join-room", (room) => {
-    socket.join(room);
-    var users = io.sockets.adapter.rooms;
-    // console.log(users);
-    // console.log(`joined room ${room}`);
-
-    socket.on("exit-room", (e) => {
-      socket.leave(room);
-      // var users = io.sockets.adapter.rooms;
-      // console.log(users);
-      console.log(`exited room ${room}`);
-    });
-  });
-
-  socket.on("chat message", (room, msg) => {
-    console.log(`Message in room ${room}: ${msg}`);
-    io.to(room).emit("chat message", msg);
-  });
-
-  // Handle disconnection
-  socket.on("disconnect", (reason) => {
-    console.log(`socket ${socket.id} disconnected due to ${reason}`);
-  });
-});

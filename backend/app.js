@@ -12,7 +12,7 @@ var indexRouter = require("./routes/index");
 var signUpRouter = require("./routes/signUp");
 var ChatsRouter = require("./routes/chats");
 // var allUsersRouter = require('./routes/allUsers');
-const connectDB = require("./db");
+const database = require("./db");
 const bodyParser = require("body-parser");
 // var messageRouter = require('./routes/messages');
 
@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 app.use(bodyParser.json({ limit: "10mb" }));
 
-connectDB();
+// database.connectDB();
 
 app.use(express.json());
 
