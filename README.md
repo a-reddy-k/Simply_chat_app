@@ -12,45 +12,51 @@ This is a simple chat application built using Node.js, Express, MongoDB (Mongoos
 - **Timestamp Formatting:** Uses Moment.js to format timestamps for messages and notifications.
 
 ## Technologies Used
+
 - Backend: Node.js, Express.js, nodemailer.
+
 * Frontend: HTML, CSS, Bootstrap, JavaScript (EJS for templating), Momentjs.
-+ Storage: MongoDB, S3.
+
+- Storage: MongoDB, S3.
 
 ## Installation
 
 ### 1. Clone the repository:
 
-```git clone https://github.com/your-username/simply-chat-app.git```
+`git clone https://github.com/your-username/simply-chat-app.git`
 
 ### 2.Install dependencies:
 
-```cd simply-chat-app```
+`cd simply-chat-app`
 
-```npm install```
+`npm install`
 
 ### 3. Create a .env file in the root directory with the following variables:
 
 PORT=3000
 
-MONGODB_URI=mongodb://localhost:27017/simply-chat
+MONGODB_USERNAME=your_mongoDB_username
 
-JWT_SECRET=your_jwt_secret_key
+MONGODB_PASSWORD=your_mongoDb_password
 
-S3_BUCKET_NAME=your_s3_bucket_name
+AWS_BUCKET_NAME=your_s3_bucket_name
 
 AWS_ACCESS_KEY_ID=your_aws_access_key_id
 
-AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_ACCESS_KEY_SECRET=your_aws_secret_access_key
 
+REGION=your_AWS_Region
+
+EMAIL=mailId_from_which_your_email_will_be_sent
+
+PASSWORD=API_PASSKEY_of_that_mailId
 
 ### 4. Start the server:
 
-```npm start```
+`npm start`
 
 ## Usage:
 
 - Register a new account or login with an existing account.
 - Start chatting with other users in real-time.
 - Upload files to share with other users.
-
-  
