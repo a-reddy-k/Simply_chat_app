@@ -3,8 +3,6 @@
 /**
  * Module dependencies.
  */
-
-// const { Socket } = require("socket.io");
 var app = require("../app");
 var debug = require("debug")("backend:server");
 var http = require("http");
@@ -24,7 +22,7 @@ app.set("port", port);
 
 var server;
 connectDB().then(() => {
-  console.log("here");
+  // console.log("here");
   server = http.createServer(app);
 
   const io = socketIo(server, {
@@ -41,16 +39,15 @@ connectDB().then(() => {
 
     socket.on("join-room", (room) => {
       socket.join(room);
-      var users = io.sockets.adapter.rooms;
+      // var users = io.sockets.adapter.rooms;
       // console.log(users);
       // console.log(`joined room ${room}`);
-
-      socket.on("exit-room", (e) => {
-        socket.leave(room);
-        // var users = io.sockets.adapter.rooms;
-        // console.log(users);
-        console.log(`exited room ${room}`);
-      });
+    });
+    socket.on("exit-room", (room) => {
+      socket.leave(room);
+      // var users = io.sockets.adapter.rooms;
+      // console.log(users);
+      // console.log(`exited room ${room}`);
     });
 
     socket.on("chat message", (room, msg) => {

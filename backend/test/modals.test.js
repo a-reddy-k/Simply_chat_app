@@ -1,6 +1,7 @@
 const chai = require("chai");
 const sinon = require("sinon");
 const expect = chai.expect;
+const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const ValidationError = mongoose.Error.ValidationError;
 
@@ -43,6 +44,23 @@ describe("Testing User model", () => {
       .catch((err) => {
         throw new Error("⚠️ Unexpected failure!");
       });
+  });
+
+  it("should compare password correctly", async () => {
+    sinon.stub(bcrypt, "compare").resolves(true);
+
+    const user = new User({
+      name: "John",
+      email: "john@test.com",
+      password: "hashedPassword",
+    });
+
+    const match = await user.matchPassword("password123");
+
+    expect(match).to.be.true;
+    expect(bcrypt.compare.calledOnce).to.be.true;
+
+    bcrypt.compare.restore();
   });
 });
 

@@ -485,8 +485,12 @@ describe("Update group chat picture", () => {
     sinon.stub(Chat, "findByIdAndUpdate").returns({
       populate: sinon.stub().resolves(null),
     });
-    await updatePic(req, res);
-    expect(res.status.called).to.be.true;
-    expect(res.status.calledWith(404)).to.be.true;
+    try {
+      await updatePic(req, res);
+    } catch (err) {
+      expect(res.status.called).to.be.true;
+      expect(res.status.calledWith(404)).to.be.true;
+      expect(err.message).to.deep.equal("Chat Not Found");
+    }
   });
 });

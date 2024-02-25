@@ -688,7 +688,7 @@
       function search() {
         document.getElementById("searchModal").style.display = "block";
       }
-      //---------------------------------------SendMsg-----------------------------------
+      //---------------------------------------SendMsg---------------------------------------------------------------
       document
         .getElementById("sendForm")
         .addEventListener("submit", function (event) {
@@ -753,7 +753,7 @@
         }
       }
 
-      //----------------------------------Socket Call-----------------------------------------------
+      //----------------------------------Socket Call----------------------------------------------------------------
       socket.on("chat message", (data) => {
         console.log("Received message:", data);
         // Update the UI with the received message
@@ -1008,22 +1008,6 @@
           }
         });
       }
-
-      //---------------------------------------------------Toggle-----------------------------------------------------
-      function toggleUserList() {
-        var userList = document.querySelector(".user-list");
-        userList.classList.toggle("toggle");
-      }
-
-      window.addEventListener("resize", function () {
-        var screenWidth = window.innerWidth;
-        var userList = document.querySelector(".user-list");
-        if (screenWidth <= 768 && !userList.classList.contains("toggle")) {
-          toggleUserList();
-        } else if (screenWidth > 768 && userList.classList.contains("toggle")) {
-          toggleUserList();
-        }
-      });
 
       //--------------------------------------Add New Member Into Group----------------------------------------------
 

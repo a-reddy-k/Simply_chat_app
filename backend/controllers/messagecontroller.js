@@ -5,10 +5,7 @@ const User = require("../models/userModel");
 const mongoose = require("mongoose");
 
 const sendMessages = asyncHandler(async (req, res) => {
-  //   console.log("inside send messgae");
-  //   console.log(req.body);
   const { content, chatId } = req.body;
-  //   console.log(content, chatId);
   if (!content || !chatId) {
     console.log("Invalid data passed into request");
     return res.sendStatus(400);
@@ -21,7 +18,6 @@ const sendMessages = asyncHandler(async (req, res) => {
   };
 
   try {
-    // console.log(req.user._id);
     var message = await Message.create(newMessage);
 
     message = await message.populate("sender", "name pic");
@@ -31,12 +27,13 @@ const sendMessages = asyncHandler(async (req, res) => {
       select: "name pic email",
     });
 
-    await Chat.findByIdAndUpdate(req.body.chatId, {
+    var ch = await Chat.findByIdAndUpdate(req.body.chatId, {
       latestMessage: message,
     });
-    // console.log(message);
+    if (!ch) {
+      throw new Error("Failed to get chat");
+    }
     res.json(message);
-    // res.redirect(`/chats`);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -47,7 +44,9 @@ const allMessages = asyncHandler(async (req, res) => {
     const messages = await Message.find({ chat: req.params.chatId })
       .populate("sender", "name pic email")
       .populate("chat");
-    // console.log(req.params.chatId);
+    if (!messages) {
+      throw new Error("No messages found");
+    }
     res.json(messages);
   } catch (error) {
     res.status(400);

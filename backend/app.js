@@ -3,8 +3,6 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const socketIo = require("socket.io");
-const http = require("http");
 require("dotenv").config();
 
 var indexRouter = require("./routes/index");

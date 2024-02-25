@@ -9,13 +9,6 @@ const connectDB = async () => {
     console.log(err.message);
     process.exit(1);
   }
-  const dbConnection = mongoose.connection;
-  dbConnection.once("open", (_) => {
-    console.log(`Database connected`);
-  });
-  dbConnection.on("erroe", (err) => {
-    console.error(`connection error: ${err}`);
-  });
   return;
 };
 

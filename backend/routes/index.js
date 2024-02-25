@@ -1,14 +1,9 @@
 var express = require("express");
-// var data= require('../dummydata/data')
 var router = express.Router();
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../generateToken");
 const sendMail = require("../controllers/nodeMailerController");
-// const { allUsers } = require('../controllers/userController');
-// const { protect } = require('../middleware/authMiddleware');
-
-// var chat=data.chats;
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -33,7 +28,7 @@ router.post(
         maxAge: 3600000 * 24,
       });
 
-      console.log(email);
+      // console.log(email);
 
       const html = `
        <h1>Login Successful</h1>
@@ -48,7 +43,5 @@ router.post(
     }
   })
 );
-
-// router.route('/').get(protect,allUsers);
 
 module.exports = router;

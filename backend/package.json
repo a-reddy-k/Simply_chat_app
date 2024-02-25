@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node --watch ./bin/www",
     "test": "mocha './test/*.test.js'",
-    "coverage":"nyc npm run test"
+    "coverage":"nyc --reporter=lcov npm run test"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.513.0",
