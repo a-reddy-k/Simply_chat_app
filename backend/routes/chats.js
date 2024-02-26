@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { chats } = require("../dummydata/data");
+// const { chats } = require("../dummydata/data");
 const { allUsers, logout } = require("../controllers/userController");
 const {
   accessChat,

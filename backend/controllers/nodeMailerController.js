@@ -1,9 +1,9 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-function sendMail(email, text, sub) {
+function sendMail(sub, email, text) {
   const mailOptions = {
-    from: process.env.Email,
+    from: process.env.EMAIL,
     to: email,
     subject: sub,
     html: text,
@@ -13,8 +13,8 @@ function sendMail(email, text, sub) {
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.Email,
-      pass: process.env.Password,
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
     },
   });
 

@@ -10,7 +10,7 @@ const allUsers = asyncHandler(async (req, res, next) => {
     const users = await User.aggregate([
       {
         $search: {
-          index: "userSearchIndex",
+          index: "searchTrail",
           text: {
             query: q,
             path: {

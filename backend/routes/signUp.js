@@ -14,10 +14,6 @@ router
       const { name, password, email } = req.body;
       var pic =
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg";
-      if (req.file) {
-        const bucketName = process.env.AWS_BUCKET_NAME;
-        pic = await uploadFileToS3(bucketName, req.file);
-      }
 
       if (!name || !email || !password) {
         res.status(400);
@@ -29,6 +25,11 @@ router
       if (userExists) {
         res.status(400);
         throw new Error("User already exists");
+      }
+
+      if (req.file) {
+        const bucketName = process.env.AWS_BUCKET_NAME;
+        pic = await uploadFileToS3(bucketName, req.file);
       }
       console.log(pic);
 
