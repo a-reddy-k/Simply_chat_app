@@ -183,8 +183,8 @@
       <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h2>Create New Group</h2>
-        <input type="text" id="userSearchModal" placeholder="Search users" />
-        <button onclick="searchUsersModal()">search</button>
+        <input type="text" id="userSearchModal" placeholder="Search users" oninput="searchUsersModal()" style="border: solid 2px;"/>
+        <!-- <button onclick="searchUsersModal()">search</button> -->
         <div id="selectedUserList" class="dispdiv"></div>
         <div
           id="userListGrp"
@@ -206,8 +206,8 @@
       <div class="modal-content">
         <span class="close" onclick="closeModal1()">&times;</span>
         <h2>Search Users</h2>
-        <input type="text" id="userSearch" placeholder="Search users" />
-        <button onclick="searchUsers()">search</button>
+        <input type="text" id="userSearch" placeholder="Search users" oninput="searchUsers()" style="border: solid 2px;"/>
+        <!-- <button onclick="searchUsers()">search</button> -->
         <div
           id="userListSearch"
           class="dispdiv"
@@ -288,8 +288,8 @@
       <div class="modal-content">
         <span class="close" onclick="closeModalAdd()">&times;</span>
         <h2>Add New User To Group</h2>
-        <input type="text" id="userSearchAdd" placeholder="Search users" />
-        <button onclick="addNewUserToGrp()">search</button>
+        <input type="text" id="userSearchAdd" placeholder="Search users" oninput="addNewUserToGrp()" style="border: solid 2px;"/>
+        <!-- <button onclick="addNewUserToGrp()">search</button> -->
         <div
           id="userListAdd"
           class="dispdiv"

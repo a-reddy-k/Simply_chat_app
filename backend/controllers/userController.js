@@ -11,13 +11,11 @@ const allUsers = asyncHandler(async (req, res, next) => {
       {
         $search: {
           index: "searchTrail",
-          text: {
+          autocomplete: {
             query: q,
-            path: {
-              wildcard: "*",
-            },
-          },
-        },
+            path: "name"
+          }
+        }
       },
     ]);
     res.json(users);
